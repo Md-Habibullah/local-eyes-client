@@ -1,0 +1,76 @@
+import z from "zod";
+
+export const registerUserSchema = z
+    .object({
+        name: z.string().min(1, { message: "Name is required" }),
+
+        address: z.string().optional(),
+
+        email: z.email({ message: "Valid email is required" }),
+
+        role: z.enum(["ADMIN", "GUIDE", "TOURIST"], {
+            message: "Role is required",
+        }),
+
+        gender: z.enum(["MALE", "FEMALE", "OTHER"], {
+            message: "Gender is required",
+        }),
+
+        password: z
+            .string()
+            .min(6, {
+                message: "Password is required and must be at least 6 characters long",
+            })
+            .max(100, {
+                message: "Password must be at most 100 characters long",
+            }),
+
+        confirmPassword: z.string().min(6, {
+            message:
+                "Confirm Password is required and must be at least 6 characters long",
+        }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+    });
+
+export const loginValidationZodSchema = z.object({
+    email: z.email({
+        message: "Email is required",
+    }),
+    password: z.string("Password is required").min(6, {
+        error: "Password is required and must be at least 6 characters long",
+    }).max(100, {
+        error: "Password must be at most 100 characters long",
+    }),
+});
+
+export const resetPasswordSchema = z
+    .object({
+        newPassword: z.string().min(6, "Password must be at least 6 characters"),
+        confirmPassword: z
+            .string()
+            .min(6, "Password must be at least 6 characters"),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+    });
+
+export const forgotPasswordSchema = z.object({
+    email: z.email("Please enter a valid email address"),
+});
+
+export const changePasswordSchema = z
+    .object({
+        oldPassword: z.string().min(6, "Password must be at least 6 characters"),
+        newPassword: z.string().min(6, "Password must be at least 6 characters"),
+        confirmPassword: z
+            .string()
+            .min(6, "Password must be at least 6 characters"),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+    });
