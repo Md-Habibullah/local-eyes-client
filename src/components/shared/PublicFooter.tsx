@@ -6,7 +6,7 @@ const PublicFooter = () => {
   return (
     <footer className="border-t border-white/10 bg-neutral-950 text-white">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_90%,rgba(59,130,246,0.05),transparent_40%)]" />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_30%_90%,rgba(59,130,246,0.05),transparent_40%)]" />
       <div className="relative">
         <div className="container mx-auto px-4 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">

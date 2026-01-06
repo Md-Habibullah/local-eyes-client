@@ -18,7 +18,7 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
                 },
                 {
                     title: "My Profile",
-                    href: "/profile",
+                    href: "/my-profile",
                     icon: "User",
                     roles: ["ADMIN", "GUIDE", "TOURIST"],
                 },
@@ -35,7 +35,7 @@ export const guideNavItems: NavSection[] = [
         title: "My Tours",
         items: [
             {
-                title: "All Tours",
+                title: "My Tours",
                 href: "/dashboard/guide/tours",
                 icon: "Map",
                 roles: ["GUIDE"],

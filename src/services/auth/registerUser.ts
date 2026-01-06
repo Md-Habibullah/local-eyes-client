@@ -19,6 +19,7 @@ export const registerUser = async (
             email: formData.get("email"),
             role: formData.get("role") as UserRole,
             gender: formData.get("gender") as Gender,
+            // dailyRate: formData.get("dailyRate"),
             password: formData.get("password"),
             confirmPassword: formData.get("confirmPassword"),
         };
@@ -46,6 +47,7 @@ export const registerUser = async (
                 name: validatedPayload!.name,
                 gender: validatedPayload!.gender,
                 address: validatedPayload!.address,
+                // dailyRate: validatedPayload!.dailyRate
             },
         };
 

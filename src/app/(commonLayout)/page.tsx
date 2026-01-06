@@ -1,8 +1,10 @@
-import Steps from "@/components/modules/Home/Steps";
-import Testimonials from "@/components/modules/Home/VerifiedGuides";
-import { Metadata } from "next";
-import TopRatedGuides from "@/components/modules/Home/TopRatedGuides";
+import CTASection from "@/components/modules/Home/CTASection";
+import FeatureSection from "@/components/modules/Home/FeatureSection";
 import Hero from "@/components/modules/Home/Hero";
+import HeroSection from "@/components/modules/Home/HeroSection";
+import HowItWorks from "@/components/modules/Home/HowItWorks";
+import PopularTours from "@/components/modules/Home/PopularTours";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "LocalEyes | Home",
@@ -10,13 +12,15 @@ export const metadata: Metadata = {
     "Discover top-rated tourist platform. Get personalized recommendations and book tours effortlessly.",
 };
 
-const HomePage = () => {
+const HomePage = async () => {
   return (
-    <main>
+    <main className="space-y-24">
       <Hero />
-      <TopRatedGuides />
-      <Steps />
-      <Testimonials />
+      <HeroSection />
+      <FeatureSection />
+      <HowItWorks />
+      <PopularTours />
+      <CTASection />
     </main>
   );
 };

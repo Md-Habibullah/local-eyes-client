@@ -1,28 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { serverFetch } from "@/lib/server-fetch";
+import RemoveWishlistButton from "@/components/modules/Home/RemoveWishlistButton";
+import EmptyState from "@/components/shared/EmptyState";
+import { getWishlist } from "@/services/tourist/getWishlist";
+import { AlertCircle } from "lucide-react";
 
-const getWishlist = async () => {
-    const res = await serverFetch.get("/wishlist", {
-        cache: "no-store",
-    });
-    return res.json();
-};
+const WishlistPage = async () => {
+    const wishlistRes = await getWishlist();
+    const wishlist = wishlistRes.data;
 
-export default async function WishlistPage() {
-    const result = await getWishlist();
+    if (!wishlist.length) {
+        return <EmptyState icon={AlertCircle} title="Wishlist is empty" />;
+    }
 
     return (
         <div className="space-y-4">
             <h1 className="text-2xl font-semibold">Wishlist</h1>
 
-            {result.data.map((tour: any) => (
-                <div key={tour.id} className="border p-4 rounded">
-                    <h3>{tour.title}</h3>
-                    <p className="text-sm text-muted-foreground">
-                        {tour.location}
-                    </p>
+            {wishlist.map((item: any) => (
+                <div
+                    key={item.id}
+                    className="border p-4 rounded flex justify-between items-center"
+                >
+                    <div>
+                        <h3 className="font-medium">{item.tour.title}</h3>
+                        <p className="text-sm text-muted-foreground">
+                            {item.tour.city}
+                        </p>
+                        <p className="text-sm">
+                            Guide: {item.tour.guide.name}
+                        </p>
+                    </div>
+
+                    <RemoveWishlistButton tourId={item.tour.id} />
                 </div>
             ))}
         </div>
     );
-}
+};
+
+export default WishlistPage;

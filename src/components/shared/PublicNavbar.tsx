@@ -10,11 +10,12 @@ const PublicNavbar = async () => {
   const user = await getUserInfo();
 
   const navItems = [
-    { href: "#", label: "Consultation" },
-    { href: "#", label: "Health Plans" },
-    { href: "#", label: "Medicine" },
-    { href: "#", label: "Diagnostics" },
-    { href: "#", label: "NGOs" },
+    { href: "/tours", label: "Tours" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
+    { href: "/faq", label: "Faq" },
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/terms", label: "Terms & Conditions" },
   ];
 
   const dashboardHref = user

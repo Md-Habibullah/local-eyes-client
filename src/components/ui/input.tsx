@@ -1,8 +1,18 @@
-import * as React from "react"
+"use client";
 
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+function Input({ className, type, style, ...props }: React.ComponentProps<"input">) {
+  const [mounted, setMounted] = React.useState(false);
+
+  // Only mark mounted after client render
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <input
       type={type}
@@ -14,8 +24,9 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
         className
       )}
       {...props}
+      style={mounted ? style : undefined} // only apply dynamic styles on client
     />
-  )
+  );
 }
 
-export { Input }
+export { Input };

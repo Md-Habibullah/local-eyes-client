@@ -82,6 +82,13 @@ const RegisterForm = () => {
               <InputFieldError field="gender" state={state} />
             </Field>
 
+            {/* Daily rate
+            <Field>
+              <FieldLabel htmlFor="dailyRate">Daily Rate</FieldLabel>
+              <Input id="dailyRate" name="dailyRate" type="number" />
+              <InputFieldError field="dailyRate" state={state} />
+            </Field> */}
+
             {/* Password */}
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>

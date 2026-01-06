@@ -8,6 +8,7 @@ import { getIconComponent } from "@/lib/icon-mapper";
 import { cn } from "@/lib/utils";
 import { NavSection } from "@/types/dashboard.interface";
 import { UserInfo } from "@/types/user.interface";
+import { MapPin } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -20,15 +21,19 @@ interface DashboardMobileSidebarContentProps {
 const DashboardMobileSidebar = ({
   userInfo,
   navItems,
-  dashboardHome,
+  // dashboardHome,
 }: DashboardMobileSidebarContentProps) => {
   const pathname = usePathname();
   return (
     <div className=" flex h-full flex-col">
       {/* Logo */}
       <div className="flex h-16 items-center border-b px-6">
-        <Link href={dashboardHome}>
-          <span className="text-xl font-bold text-primary">LocalEyes</span>
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-lg font-semibold tracking-tight text-white"
+        >
+          <MapPin className="h-5 w-5 text-blue-400" />
+          Local<span className="text-blue-400">Eyes</span>
         </Link>
       </div>
       <SheetTitle className="sr-only">Navigation Menu</SheetTitle>

@@ -1,75 +1,52 @@
 // import { serverFetch } from "@/lib/serverFetch";
-import { serverFetch } from "@/lib/server-fetch";
-import { Booking } from "@/types/booking";
 
-const getBooking = async (id: string): Promise<Booking> => {
-    const res = await serverFetch.get(`/bookings/${id}`, {
-        cache: "no-store",
-    });
+import EmptyState from "@/components/shared/EmptyState";
+import { Button } from "@/components/ui/button";
+import { getBookingById } from "@/services/tourist/getBookingById";
+import { AlertCircle } from "lucide-react";
+import Link from "next/link";
 
-    if (!res.ok) throw new Error("Failed");
-    const result = await res.json();
-    return result.data;
-};
 
-export default async function BookingDetails({
-    params,
-}: {
-    params: { id: string };
-}) {
-    const booking = await getBooking(params.id);
+const BookingDetails = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
+
+    const booking = await getBookingById(id);
+    const isReviewAllowed = booking?.status === "COMPLETED";
+    console.log("resultFromComp", booking)
+
+    if (!booking) {
+        return <EmptyState icon={AlertCircle} title="Failed to load booking." />;
+    }
+
+    if (booking && booking.error) {
+        return <EmptyState icon={AlertCircle} title={booking.error} />;
+    }
 
     return (
-        <div className="space-y-6">
-            <h1 className="text-xl font-semibold">
-                {booking.tour.title}
-            </h1>
+        <div className="space-y-4">
+            <h1 className="text-xl font-semibold">Booking Details</h1>
 
-            <p className="text-muted-foreground">
-                Location: {booking.tour.location}
-            </p>
+            <p>Status: {booking?.status}</p>
+            <p>Date: {new Date(booking?.date).toDateString()}</p>
+            <p>Total: ${booking?.totalAmount}</p>
 
-            <p>Status: {booking.status}</p>
-            <p>Total: ৳ {booking.totalPrice}</p>
+            <h2 className="font-medium mt-4">Tour</h2>
+            <p>{booking?.tour?.title}</p>
 
-            {/* REVIEW */}
-            {booking.status === "CONFIRMED" && (
-                <form
-                    action={async (formData) => {
-                        "use server";
-                        await serverFetch.post("/reviews", {
-                            body: JSON.stringify({
-                                tourId: booking.tour.id,
-                                rating: Number(formData.get("rating")),
-                                comment: formData.get("comment"),
-                            }),
-                            headers: { "Content-Type": "application/json" },
-                        });
-                    }}
-                    className="space-y-2"
-                >
-                    <h3 className="font-medium">Leave a Review</h3>
+            <h2 className="font-medium mt-4">Guide</h2>
+            <p>{booking?.guide?.name}</p>
+            <Button
+                asChild
+                disabled={!isReviewAllowed}
+                className={!isReviewAllowed ? "pointer-events-none opacity-50" : ""}
+            >
+                <Link href={`/dashboard/tourist/bookings/${booking?.id}/review`}>
+                    Review here
+                </Link>
+            </Button>
 
-                    <input
-                        name="rating"
-                        type="number"
-                        min={1}
-                        max={5}
-                        placeholder="Rating (1-5)"
-                        className="border p-2 w-full"
-                    />
-
-                    <textarea
-                        name="comment"
-                        placeholder="Your review"
-                        className="border p-2 w-full"
-                    />
-
-                    <button className="px-4 py-2 bg-primary text-white rounded">
-                        Submit Review
-                    </button>
-                </form>
-            )}
         </div>
     );
-}
+};
+
+export default BookingDetails;
