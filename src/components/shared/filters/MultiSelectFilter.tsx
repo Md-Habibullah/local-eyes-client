@@ -19,10 +19,12 @@ import {
 import { Check, ChevronsUpDown, Filter, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
+import { cn } from "@/lib/utils";
 
 export interface MultiSelectOption {
     value: string;
     label: string;
+    count?: number;
 }
 
 interface MultiSelectFilterProps {
@@ -35,45 +37,35 @@ interface MultiSelectFilterProps {
     showBadges?: boolean;
     badgesOnly?: boolean;
     onSelectionChange?: (selected: string[]) => void;
+    maxSelections?: number;
 }
 
-/**
- * Reusable Multi-Select Filter Component
- *
- * @example
- * <MultiSelectFilter
- *   paramName="specialties"
- *   options={specialties.map(s => ({ value: s.id, label: s.title }))}
- *   placeholder="Select specialties"
- *   showBadges={true}
- * />
- */
 const MultiSelectFilter = ({
     paramName,
     options,
     placeholder = "Select options",
     searchPlaceholder = "Search...",
     emptyMessage = "No options found.",
-    triggerClassName = "w-60",
+    triggerClassName = "w-64",
     showBadges = false,
     badgesOnly = false,
     onSelectionChange,
+    maxSelections,
 }: MultiSelectFilterProps) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [isPending, startTransition] = useTransition();
     const [open, setOpen] = useState(false);
 
-    // Derive local selection from URL params
     const urlValues = searchParams.getAll(paramName);
-
-    // Track draft state separately from URL values
     const [draftSelection, setDraftSelection] = useState<string[] | null>(null);
-
-    // Use draft if in edit mode, otherwise use URL values
     const localSelection = draftSelection ?? urlValues;
 
     const toggleOption = (value: string) => {
+        if (maxSelections && localSelection.length >= maxSelections && !localSelection.includes(value)) {
+            return;
+        }
+
         const currentSelection = draftSelection ?? urlValues;
         const newSelection = currentSelection.includes(value)
             ? currentSelection.filter((v) => v !== value)
@@ -84,27 +76,20 @@ const MultiSelectFilter = ({
 
     const applyFilter = () => {
         const params = new URLSearchParams(searchParams.toString());
-
-        // Remove existing param values
         params.delete(paramName);
 
-        // Add new values
         if (localSelection.length > 0) {
             localSelection.forEach((val) => params.append(paramName, val));
         }
 
-        // Reset to page 1
         params.set("page", "1");
 
         startTransition(() => {
             router.push(`?${params.toString()}`);
-            // Clear draft after navigation
             setDraftSelection(null);
         });
 
-        // Callback for parent component
         onSelectionChange?.(localSelection);
-
         setOpen(false);
     };
 
@@ -129,36 +114,37 @@ const MultiSelectFilter = ({
 
     const getSelectedLabels = () => {
         return localSelection
-            .map((value) => options.find((opt) => opt.value === value)?.label)
+            .map((value) => {
+                const option = options.find((opt) => opt.value === value);
+                return option ? { label: option.label, value: option.value, count: option.count } : null;
+            })
             .filter(Boolean);
     };
 
-    // If badgesOnly mode, just render badges
     if (badgesOnly) {
         return (
             <div className="flex flex-wrap gap-2">
                 {localSelection.length > 0 &&
-                    getSelectedLabels().map((label) => {
-                        const value = options.find((opt) => opt.label === label)?.value;
-                        return (
-                            <Badge
-                                key={value}
-                                variant="secondary"
-                                className="px-3 py-1.5 h-8 text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                    getSelectedLabels().map((item) => (
+                        <Badge
+                            key={item?.value}
+                            variant="secondary"
+                            className="group px-3 py-1.5 h-8 text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-all duration-300"
+                        >
+                            {item?.label}
+                            {item?.count !== undefined && (
+                                <span className="ml-1.5 text-xs opacity-75">({item?.count})</span>
+                            )}
+                            <Button
+                                variant="link"
+                                onClick={() => removeOption(item!.value)}
+                                className="ml-2 p-0 h-4 w-4 hover:text-destructive transition-colors"
+                                disabled={isPending}
                             >
-                                {label}
-                                <Button
-                                    variant="link"
-                                    onClick={() => value && removeOption(value)}
-                                    className="ml-2 hover:text-destructive transition-colors cursor-pointer"
-                                    aria-label={`Remove ${label}`}
-                                    disabled={isPending}
-                                >
-                                    <X className="h-3.5 w-3.5" />
-                                </Button>
-                            </Badge>
-                        );
-                    })}
+                                <X className="h-3 w-3" />
+                            </Button>
+                        </Badge>
+                    ))}
             </div>
         );
     }
@@ -171,17 +157,27 @@ const MultiSelectFilter = ({
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className={`justify-between h-10 ${triggerClassName}`}
+                        className={cn(
+                            "justify-between h-10 border-border/50 hover:border-primary/50 transition-all",
+                            localSelection.length > 0 && "border-primary/30 bg-primary/5",
+                            triggerClassName
+                        )}
                         disabled={isPending}
                     >
-                        <Filter className="mr-2 h-4 w-4" />
-                        {localSelection.length > 0
-                            ? `${localSelection.length} selected`
-                            : placeholder}
+                        <div className="flex items-center gap-2">
+                            <Filter className="h-4 w-4 text-muted-foreground" />
+                            {localSelection.length > 0 ? (
+                                <span className="font-medium">
+                                    {localSelection.length} selected
+                                </span>
+                            ) : (
+                                <span className="text-muted-foreground">{placeholder}</span>
+                            )}
+                        </div>
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className={`p-0 ${triggerClassName}`} align="start">
+                <PopoverContent className={cn("p-0", triggerClassName)} align="start">
                     <Command>
                         <CommandInput placeholder={searchPlaceholder} />
                         <CommandList>
@@ -189,17 +185,36 @@ const MultiSelectFilter = ({
                             <CommandGroup>
                                 {options.map((option) => {
                                     const isSelected = localSelection.includes(option.value);
+                                    const isDisabled = maxSelections
+                                        ? localSelection.length >= maxSelections && !isSelected
+                                        : false;
+
                                     return (
                                         <CommandItem
                                             key={option.value}
                                             value={option.label}
-                                            onSelect={() => toggleOption(option.value)}
-                                            className={isSelected ? "bg-accent" : ""}
+                                            onSelect={() => !isDisabled && toggleOption(option.value)}
+                                            className={cn(
+                                                isSelected && "bg-accent",
+                                                isDisabled && "opacity-50 cursor-not-allowed"
+                                            )}
                                         >
-                                            <Checkbox checked={isSelected} className="mr-2" />
-                                            <span className={isSelected ? "font-medium" : ""}>
+                                            <Checkbox
+                                                checked={isSelected}
+                                                className="mr-2"
+                                                disabled={isDisabled}
+                                            />
+                                            <span className={cn(
+                                                "flex-1",
+                                                isSelected && "font-medium"
+                                            )}>
                                                 {option.label}
                                             </span>
+                                            {option.count !== undefined && (
+                                                <span className="text-xs text-muted-foreground ml-2">
+                                                    ({option.count})
+                                                </span>
+                                            )}
                                             {isSelected && (
                                                 <Check className="ml-auto h-4 w-4 text-primary" />
                                             )}
@@ -208,39 +223,54 @@ const MultiSelectFilter = ({
                                 })}
                             </CommandGroup>
                         </CommandList>
-                        <div className="p-2 border-t">
+                        <div className="p-3 border-t">
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-sm text-muted-foreground">
+                                    {localSelection.length} selected
+                                    {maxSelections && ` / ${maxSelections} max`}
+                                </span>
+                                {localSelection.length > 0 && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => setDraftSelection([])}
+                                        className="h-7 text-xs"
+                                    >
+                                        Clear all
+                                    </Button>
+                                )}
+                            </div>
                             <Button
                                 onClick={applyFilter}
                                 className="w-full"
                                 size="sm"
                                 disabled={isPending}
                             >
-                                Apply Filter
+                                Apply Filters
                             </Button>
                         </div>
                     </Command>
                 </PopoverContent>
             </Popover>
 
-            {/* Optional: Display selected badges */}
             {showBadges && localSelection.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                    {getSelectedLabels().map((label) => {
-                        const value = options.find((opt) => opt.label === label)?.value;
-                        return (
-                            <Badge key={value} variant="outline" className="px-2.5 py-1 h-7">
-                                {label}
-                                <button
-                                    onClick={() => value && removeOption(value)}
-                                    className="ml-1.5 hover:text-destructive transition-colors"
-                                    aria-label={`Remove ${label}`}
-                                    disabled={isPending}
-                                >
-                                    <X className="h-3 w-3" />
-                                </button>
-                            </Badge>
-                        );
-                    })}
+                    {getSelectedLabels().map((item) => (
+                        <Badge
+                            key={item?.value}
+                            variant="outline"
+                            className="px-2.5 py-1 h-7 group"
+                        >
+                            {item?.label}
+                            <button
+                                onClick={() => removeOption(item!.value)}
+                                className="ml-1.5 hover:text-destructive transition-colors"
+                                disabled={isPending}
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                        </Badge>
+                    ))}
                 </div>
             )}
         </div>

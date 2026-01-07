@@ -3,7 +3,7 @@
 import { serverFetch } from "@/lib/server-fetch";
 
 export const addToWishlist = async (tourId: string) => {
-    const res = await serverFetch.post("/wishlists", {
+    const res = await serverFetch.post("/wishlists/toggle", {
         body: JSON.stringify({ tourId }),
         headers: {
             "Content-Type": "application/json",

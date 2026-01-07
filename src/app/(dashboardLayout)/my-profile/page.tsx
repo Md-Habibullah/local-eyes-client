@@ -41,5 +41,5 @@ export default async function ProfilePage() {
     return <GuideProfile userData={userData} />;
   }
 
-  return <AdminProfile userData={userData} />;
+  return <div>No Profile found</div>;
 }

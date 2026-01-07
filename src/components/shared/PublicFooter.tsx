@@ -1,112 +1,110 @@
 import Link from "next/link";
-import { MapPin, Globe, ShieldCheck, Heart } from "lucide-react";
-// import { Button } from "../ui/button";
+import { MapPin, Globe, ShieldCheck, Heart, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 
 const PublicFooter = () => {
   return (
-    <footer className="border-t border-white/10 bg-neutral-950 text-white">
-      {/* Background Effects */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_30%_90%,rgba(59,130,246,0.05),transparent_40%)]" />
-      <div className="relative">
-        <div className="container mx-auto px-4 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-            {/* Brand */}
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-7 w-7 text-blue-400" />
-                <h3 className="text-xl font-semibold">
-                  Local<span className="text-blue-400">Eyes</span>
-                </h3>
+    <footer className="relative border-t border-border bg-background">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-linear-to-b from-background via-background/95 to-background pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_90%,rgba(59,130,246,0.05),transparent_40%)] pointer-events-none" />
+
+      <div className="relative container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+          {/* Brand */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="absolute -inset-2 bg-primary/10 rounded-full blur-sm" />
+                <MapPin className="relative h-8 w-8 text-primary" />
               </div>
-              <p className="mt-4 max-w-md text-sm text-white/60 leading-relaxed">
-                Connect with trusted local guides worldwide to discover authentic places,
-                real culture, and hidden experiences — travel like a local, not like a tourist.
-              </p>
+              <h3 className="text-2xl font-bold tracking-tight">
+                Local<span className="text-primary">Eyes</span>
+              </h3>
+            </div>
 
-              <div className="mt-6 flex items-center gap-4 text-sm text-white/50">
-                <div className="flex items-center gap-1">
-                  <ShieldCheck className="h-4 w-4 text-blue-400" />
-                  <span>Verified Guides</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Globe className="h-4 w-4 text-blue-400" />
-                  <span>50+ Countries</span>
-                </div>
+            <p className="text-base text-muted-foreground leading-relaxed max-w-md">
+              Connect with trusted local guides worldwide to discover authentic places,
+              real culture, and hidden experiences — travel like a local, not like a tourist.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 text-sm font-medium">
+                <ShieldCheck className="h-4 w-4 text-primary" />
+                <span>Verified Guides</span>
               </div>
-            </div>
-
-            {/* Explore */}
-            <div>
-              <h3 className="font-medium mb-4 text-white">Explore</h3>
-              <ul className="space-y-3 text-sm text-white/60">
-                <li><Link href="#" className="hover:text-white transition-colors">Destinations</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Local Experiences</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">City Guides</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Adventure Tours</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Food & Culture</Link></li>
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h3 className="font-medium mb-4 text-white">Company</h3>
-              <ul className="space-y-3 text-sm text-white/60">
-                <li><Link href="#" className="hover:text-white transition-colors">About Us</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">How It Works</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Become a Guide</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Careers</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Press</Link></li>
-              </ul>
-            </div>
-
-            {/* Support */}
-            <div>
-              <h3 className="font-medium mb-4 text-white">Support</h3>
-              <ul className="space-y-3 text-sm text-white/60">
-                <li><Link href="#" className="hover:text-white transition-colors">Help Center</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Safety</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Terms</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Privacy</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Contact</Link></li>
-              </ul>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 text-sm font-medium">
+                <Globe className="h-4 w-4 text-primary" />
+                <span>50+ Countries</span>
+              </div>
             </div>
           </div>
 
-          {/* Newsletter */}
-          {/* <div className="mt-14 pt-8 border-t border-white/10">
-            <div className="max-w-md">
-              <h4 className="font-medium mb-3">Join our travel community</h4>
-              <p className="text-sm text-white/60 mb-4">
-                Get insider tips, local stories, and exclusive offers in your inbox.
-              </p>
-              <div className="flex gap-3">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder:text-white/40 focus:outline-none focus:border-blue-400/30"
-                />
-                <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-                  Subscribe
-                </Button>
-              </div>
+          {/* Links sections */}
+          {[
+            {
+              title: "Explore",
+              links: ["Destinations", "Local Experiences", "City Guides", "Adventure Tours", "Food & Culture"]
+            },
+            {
+              title: "Company",
+              links: ["About Us", "How It Works", "Become a Guide", "Careers", "Press"]
+            },
+            {
+              title: "Support",
+              links: ["Help Center", "Safety", "Terms", "Privacy", "Contact"]
+            }
+          ].map((section) => (
+            <div key={section.title} className="space-y-4">
+              <h3 className="font-semibold text-lg">{section.title}</h3>
+              <ul className="space-y-3">
+                {section.links.map((link) => (
+                  <li key={link}>
+                    <Link
+                      href="#"
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center group"
+                    >
+                      <span className="group-hover:translate-x-1 transition-transform">
+                        {link}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div> */}
+          ))}
+        </div>
 
-          {/* Bottom Bar */}
-          <div className="mt-10 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/50">
-            <div>
-              © {new Date().getFullYear()} LocalEyes. All rights reserved.
-            </div>
-            <div className="flex items-center gap-1">
-              <span>Made with</span>
-              <Heart className="h-3 w-3 text-red-400 fill-red-400" />
-              <span>for travelers</span>
-            </div>
-            <div className="flex items-center gap-6">
-              <Link href="#" className="hover:text-white transition-colors">Twitter</Link>
-              <Link href="#" className="hover:text-white transition-colors">Instagram</Link>
-              <Link href="#" className="hover:text-white transition-colors">Facebook</Link>
-            </div>
+        {/* Divider */}
+        <div className="my-12 h-px bg-linear-to-r from-transparent via-border to-transparent" />
+
+        {/* Bottom section */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} LocalEyes. All rights reserved.
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Made with</span>
+            <Heart className="h-4 w-4 text-destructive animate-pulse" />
+            <span>for travelers</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {[
+              { icon: Twitter, label: "Twitter" },
+              { icon: Instagram, label: "Instagram" },
+              { icon: Facebook, label: "Facebook" },
+              { icon: Youtube, label: "YouTube" }
+            ].map((social) => (
+              <Link
+                key={social.label}
+                href="#"
+                className="h-10 w-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-all duration-300"
+                aria-label={social.label}
+              >
+                <social.icon className="h-5 w-5" />
+              </Link>
+            ))}
           </div>
         </div>
       </div>

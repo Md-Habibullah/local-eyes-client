@@ -1,60 +1,49 @@
 "use client";
-import { Search } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
-import { Input } from "../../ui/input";
-import { useDebounce } from "@/hooks/useDebounce";
+
+import { Input } from "@/components/ui/input";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface SearchFilterProps {
     placeholder?: string;
-    paramName?: string;
+    paramName?: string; // default: search
+    debounceMs?: number;
 }
 
-const SearchFilter = ({
+export default function SearchFilter({
     placeholder = "Search...",
-    paramName = "searchTerm",
-}: SearchFilterProps) => {
+    paramName = "search",
+    debounceMs = 500,
+}: SearchFilterProps) {
     const router = useRouter();
-    const [isPending, startTransition] = useTransition();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
-    const [value, setValue] = useState(searchParams.get(paramName) || "");
-    const debouncedValue = useDebounce(value, 500);
+
+    const initialValue = searchParams.get(paramName) || "";
+    const [value, setValue] = useState(initialValue);
 
     useEffect(() => {
-        const params = new URLSearchParams(searchParams.toString());
+        const timer = setTimeout(() => {
+            const params = new URLSearchParams(searchParams.toString());
 
-        const initialValue = searchParams.get(paramName) || "";
+            if (value) {
+                params.set(paramName, value);
+                params.set("page", "1"); // reset pagination
+            } else {
+                params.delete(paramName);
+            }
 
-        if (debouncedValue === initialValue) {
-            return;
-        }
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        }, debounceMs);
 
-        if (debouncedValue) {
-            params.set(paramName, debouncedValue); // ?searchTerm=debouncedValue
-            params.set("page", "1"); // reset to first page on search
-        } else {
-            params.delete(paramName); // remove searchTerm param
-            params.delete("page"); // reset to first page on search clear
-        }
-
-        startTransition(() => {
-            router.push(`?${params.toString()}`);
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedValue, paramName, router]);
+        return () => clearTimeout(timer);
+    }, [value, debounceMs, pathname, router, searchParams, paramName]);
 
     return (
-        <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-                placeholder={placeholder}
-                className="pl-10"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                disabled={isPending}
-            />
-        </div>
+        <Input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={placeholder}
+        />
     );
-};
-
-export default SearchFilter;
+}

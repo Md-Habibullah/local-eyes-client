@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -6,9 +7,10 @@ import {
     Cell,
     Tooltip,
     ResponsiveContainer,
+    Legend,
 } from "recharts";
 
-const COLORS = ["#2563eb", "#16a34a", "#f59e0b", "#dc2626"];
+const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
 
 interface PieChartCardProps {
     title: string;
@@ -19,33 +21,52 @@ interface PieChartCardProps {
 }
 
 const PieChartCard = ({ title, data }: PieChartCardProps) => {
-    return (
-        <div className="border rounded-lg p-4">
-            <h3 className="text-sm font-medium mb-4">{title}</h3>
+    const renderLabel = (entry: any) => {
+        const total = data.reduce((sum, item) => sum + item.value, 0);
+        const percentage = total > 0 ? ((entry.value / total) * 100).toFixed(1) : '0';
+        return `${percentage}%`;
+    };
 
-            <div className="h-55">
-                <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                        <Pie
-                            data={data}
-                            dataKey="value"
-                            nameKey="name"
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={80}
-                            label
-                        >
-                            {data.map((_, index) => (
-                                <Cell
-                                    key={index}
-                                    fill={COLORS[index % COLORS.length]}
-                                />
-                            ))}
-                        </Pie>
-                        <Tooltip />
-                    </PieChart>
-                </ResponsiveContainer>
-            </div>
+    return (
+        <div className="h-full w-full">
+            <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                    <Pie
+                        data={data}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={100}
+                        paddingAngle={2}
+                        label={renderLabel}
+                        labelLine={false}
+                    >
+                        {data.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={COLORS[index % COLORS.length]}
+                                stroke="#fff"
+                                strokeWidth={2}
+                            />
+                        ))}
+                    </Pie>
+                    <Tooltip
+                        formatter={(value) => [value, 'Count']}
+                        labelFormatter={(name) => `Category: ${name}`}
+                    />
+                    <Legend
+                        verticalAlign="bottom"
+                        height={36}
+                        formatter={(value, entry: any) => (
+                            <span className="text-sm text-gray-700">
+                                {value} ({entry.payload.value})
+                            </span>
+                        )}
+                    />
+                </PieChart>
+            </ResponsiveContainer>
         </div>
     );
 };

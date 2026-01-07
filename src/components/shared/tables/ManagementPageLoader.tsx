@@ -1,12 +1,15 @@
 "use client";
 import { TableSkeleton } from "@/components/shared/tables/TableSkeleton";
 import { useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface ManagementPageLoadingProps {
     columns: number;
     hasActionButton?: boolean;
     filterCount?: number;
     filterWidths?: string[];
+    showStats?: boolean;
 }
 
 export function ManagementPageLoading({
@@ -14,18 +17,17 @@ export function ManagementPageLoading({
     hasActionButton = false,
     filterCount = 0,
     filterWidths = [],
+    showStats = false,
 }: ManagementPageLoadingProps) {
-    // Memoize filter elements to prevent recreation on every render
     const filterElements = useMemo(() => {
         if (filterCount === 0) return null;
 
         return (
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
                 {Array.from({ length: filterCount }).map((_, index) => (
-                    <div
+                    <Skeleton
                         key={index}
-                        className={`h-10 ${filterWidths[index] || "w-40"
-                            } bg-slate-300 dark:bg-slate-700 animate-pulse rounded-md border-2 border-slate-400 dark:border-slate-500 shadow-sm`}
+                        className={`h-10 ${filterWidths[index] || "w-40"} rounded-lg`}
                     />
                 ))}
             </div>
@@ -33,23 +35,43 @@ export function ManagementPageLoading({
     }, [filterCount, filterWidths]);
 
     return (
-        <div className="space-y-6">
-            {/* Header Skeleton */}
-            <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                    <div className="h-8 w-64 bg-slate-300 dark:bg-slate-700 animate-pulse rounded-md shadow-sm" />
-                    <div className="h-4 w-96 bg-slate-300 dark:bg-slate-700 animate-pulse rounded-md shadow-sm" />
+        <div className="space-y-8 animate-pulse">
+            {/* Header */}
+            <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-3">
+                        <Skeleton className="h-8 w-64 rounded-lg" />
+                        <Skeleton className="h-4 w-96 rounded-lg" />
+                    </div>
+                    {hasActionButton && (
+                        <Skeleton className="h-10 w-32 rounded-lg" />
+                    )}
                 </div>
-                {hasActionButton && (
-                    <div className="h-10 w-32 bg-slate-300 dark:bg-slate-700 animate-pulse rounded-md shadow-sm" />
+
+                {/* Stats Cards */}
+                {showStats && (
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        {[...Array(4)].map((_, i) => (
+                            <Card key={i} className="border-border/30">
+                                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                    <Skeleton className="h-4 w-28" />
+                                    <Skeleton className="h-10 w-10 rounded-full" />
+                                </CardHeader>
+                                <CardContent>
+                                    <Skeleton className="h-8 w-24 mb-2" />
+                                    <Skeleton className="h-3 w-36" />
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
                 )}
             </div>
 
-            {/* Filters Skeleton */}
+            {/* Filters */}
             {filterElements}
 
-            {/* Table Skeleton */}
-            <TableSkeleton columns={columns} rows={10} />
+            {/* Table */}
+            <TableSkeleton columns={columns} rows={6} />
         </div>
     );
 }

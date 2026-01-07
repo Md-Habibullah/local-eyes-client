@@ -1,62 +1,74 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Filter } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 
 interface SelectFilterProps {
-    paramName: string; // ?gender=
+    paramName: string;
     placeholder?: string;
     defaultValue?: string;
-    options: { label: string; value: string }[];
+    options: { label: string; value: string; icon?: React.ReactNode }[];
+    className?: string;
 }
 
 const SelectFilter = ({
     paramName,
-    placeholder,
+    placeholder = "All",
     options,
-    defaultValue = "All",
+    defaultValue = "all",
+    className,
 }: SelectFilterProps) => {
     const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
-    const [isPending, startTransition] = useTransition();
 
     const currentValue = searchParams.get(paramName) || defaultValue;
 
     const handleChange = (value: string) => {
         const params = new URLSearchParams(searchParams.toString());
 
+        // reset pagination on filter change
+        params.delete("page");
+
         if (value === defaultValue) {
             params.delete(paramName);
-        } else if (value) {
-            params.set(paramName, value);
         } else {
-            params.delete(paramName);
+            params.set(paramName, value);
         }
 
-        startTransition(() => {
-            router.push(`?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`, {
+            scroll: false,
         });
     };
+
     return (
-        <Select
-            value={currentValue}
-            onValueChange={handleChange}
-            disabled={isPending}
-        >
-            <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
+        <Select value={currentValue} onValueChange={handleChange}>
+            <SelectTrigger className={cn("h-10 w-full min-w-40", className)}>
+                <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <SelectValue placeholder={placeholder} />
+                </div>
             </SelectTrigger>
+
             <SelectContent>
-                <SelectItem value={defaultValue}>{defaultValue}</SelectItem>
+                <SelectItem value={defaultValue}>
+                    <span className="text-muted-foreground">{placeholder}</span>
+                </SelectItem>
+
                 {options.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                        <div className="flex items-center gap-2">
+                            {option.icon}
+                            <span>{option.label}</span>
+                        </div>
                     </SelectItem>
                 ))}
             </SelectContent>

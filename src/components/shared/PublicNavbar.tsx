@@ -13,9 +13,9 @@ const PublicNavbar = async () => {
     { href: "/tours", label: "Tours" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
-    { href: "/faq", label: "Faq" },
-    { href: "/privacy-policy", label: "Privacy Policy" },
-    { href: "/terms", label: "Terms & Conditions" },
+    { href: "/faq", label: "FAQ" },
+    { href: "/privacy-policy", label: "Privacy" },
+    { href: "/terms", label: "Terms" },
   ];
 
   const dashboardHref = user
@@ -23,26 +23,35 @@ const PublicNavbar = async () => {
     : "/login";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-neutral-950/80 backdrop-blur">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-lg font-semibold tracking-tight text-white"
+          className="group flex items-center gap-2.5 text-lg font-bold tracking-tight"
         >
-          <MapPin className="h-5 w-5 text-blue-400" />
-          Local<span className="text-blue-400">Eyes</span>
+          <div className="relative">
+            <div className="absolute -inset-2 bg-primary/10 rounded-full blur-sm group-hover:bg-primary/20 transition-all duration-300" />
+            <MapPin className="relative h-6 w-6 text-primary" />
+          </div>
+          <span className="relative">
+            Local
+            <span className="text-primary transition-all duration-300 group-hover:tracking-wider">
+              Eyes
+            </span>
+          </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-sm text-white/70">
-          {navItems.map(link => (
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navItems.map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className="hover:text-white transition-colors"
+              className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 group"
             >
               {link.label}
+              <span className="absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 bg-primary transition-all duration-300 group-hover:w-3/4" />
             </Link>
           ))}
         </nav>
@@ -53,18 +62,28 @@ const PublicNavbar = async () => {
             <>
               <Link href={dashboardHref}>
                 <Button
-                  variant="outline"
-                  className="border-white/20 text-white bg-blue-600 hover:bg-white/10"
+                  variant="default"
+                  className="relative overflow-hidden group shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300"
                 >
-                  Dashboard
+                  <span className="relative z-10">Dashboard</span>
+                  <div className="absolute inset-0 bg-linear-to-r from-primary to-primary/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </Button>
               </Link>
               <LogoutButton />
             </>
           ) : (
-            <Link href="/login">
-              <Button>Login</Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link href="/login">
+                <Button variant="ghost" className="font-medium">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button className="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300">
+                  Get Started
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
 
@@ -73,50 +92,69 @@ const PublicNavbar = async () => {
           <Sheet>
             <SheetTrigger asChild>
               <Button
-                variant="outline"
-                className="border-white/20 text-white hover:bg-white/10"
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10"
               >
-                <Menu />
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-
-            <SheetContent
-              side="right"
-              className="bg-neutral-950 border-white/10"
-            >
-              <SheetTitle className="sr-only">Navigation</SheetTitle>
-
-              <nav className="mt-8 flex flex-col gap-6 text-white">
-                {navItems.map(link => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="text-lg font-medium text-white/80 hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-
-                <div className="border-t border-white/10 pt-6 flex flex-col gap-3">
-                  {user ? (
-                    <>
-                      <Link href={dashboardHref}>
-                        <Button
-                          variant="outline"
-                          className="w-full border-white/20 text-white hover:bg-white/10"
-                        >
-                          Dashboard
-                        </Button>
-                      </Link>
-                      <LogoutButton />
-                    </>
-                  ) : (
-                    <Link href="/login">
-                      <Button className="w-full">Login</Button>
-                    </Link>
-                  )}
+            <SheetContent side="right" className="w-70 p-0">
+              <div className="flex flex-col h-full">
+                <div className="p-6 border-b">
+                  <SheetTitle className="text-lg font-semibold">Menu</SheetTitle>
                 </div>
-              </nav>
+
+                <nav className="flex-1 overflow-y-auto p-6">
+                  <div className="space-y-2">
+                    {navItems.map((link) => (
+                      <SheetTrigger key={link.label} asChild>
+                        <Link
+                          href={link.href}
+                          className="flex items-center rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200"
+                        >
+                          {link.label}
+                        </Link>
+                      </SheetTrigger>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 pt-6 border-t">
+                    {user ? (
+                      <div className="space-y-4">
+                        <SheetTrigger asChild>
+                          <Link href={dashboardHref}>
+                            <Button className="w-full">
+                              Dashboard
+                            </Button>
+                          </Link>
+                        </SheetTrigger>
+                        <div className="flex justify-center">
+                          <LogoutButton />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <SheetTrigger asChild>
+                          <Link href="/login">
+                            <Button className="w-full" variant="outline">
+                              Sign In
+                            </Button>
+                          </Link>
+                        </SheetTrigger>
+                        <SheetTrigger asChild>
+                          <Link href="/register">
+                            <Button className="w-full">
+                              Create Account
+                            </Button>
+                          </Link>
+                        </SheetTrigger>
+                      </div>
+                    )}
+                  </div>
+                </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>

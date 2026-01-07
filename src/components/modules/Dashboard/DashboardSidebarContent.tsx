@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { NavSection } from "@/types/dashboard.interface";
 import { UserInfo } from "@/types/user.interface";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { MapPin } from "lucide-react";
+import { MapPin, Sparkles, Zap, Shield, Crown, ChevronRight, Settings, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -37,73 +37,209 @@ const DashboardSidebarContent = ({
       .sort((a, b) => b.href.length - a.href.length)[0]?.href ?? null;
 
   return (
-    <div className="hidden md:flex h-full w-64 flex-col border-r bg-card">
-      {/* Logo */}
-      <div className="flex h-16 items-center border-b px-6">
+    <div className="hidden md:flex h-screen w-72 flex-col border-r bg-gradient-to-b from-gray-900 via-gray-900 to-black">
+      {/* Logo Section */}
+      <div className="relative px-6 py-5 border-b border-gray-800/50 shrink-0">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+
         <Link
           href="/"
-          className="flex items-center gap-2 text-lg font-semibold tracking-tight text-red-500"
+          className="flex items-center gap-3 group"
         >
-          <MapPin className="h-5 w-5 text-blue-400" />
-          Local<span className="text-blue-400">Eyes</span>
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
+            <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-gray-800 flex items-center justify-center group-hover:border-blue-500/30 transition-all duration-300">
+              <MapPin className="h-6 w-6 text-blue-400 group-hover:text-blue-300 transition-colors" />
+              <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-400" />
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <span className="text-xl font-bold tracking-tight text-white">
+              Local<span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Eyes</span>
+            </span>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-medium text-gray-400 tracking-wide">ADMIN CONSOLE</span>
+            </div>
+          </div>
         </Link>
+
+        {/* Quick Status */}
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-800/20">
+            <Zap className="w-3 h-3 text-yellow-400" />
+            <span className="text-xs font-medium text-gray-300">Live</span>
+          </div>
+          <div className="text-xs font-medium text-gray-500">
+            v2.4.1
+          </div>
+        </div>
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-4">
-        <nav className="space-y-6">
-          {navItems.map((section, sectionIdx) => (
-            <div key={sectionIdx}>
-              {section.title && (
-                <h4 className="mb-2 px-3 text-xs font-semibold text-muted-foreground uppercase">
-                  {section.title}
-                </h4>
-              )}
-
-              <div className="space-y-1">
-                {section.items.map((item) => {
-                  const isActive = item.href === activeHref;
-                  const Icon = getIconComponent(item.icon);
-
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={cn(
-                        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
-                        isActive
-                          ? "bg-primary text-primary-foreground"
-                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                      )}
-                    >
-                      <Icon className="h-4 w-4" />
-                      <span className="flex-1">{item.title}</span>
-                      {item.badge && (
-                        <Badge
-                          variant={isActive ? "secondary" : "default"}
-                          className="ml-auto"
-                        >
-                          {item.badge}
-                        </Badge>
-                      )}
-                    </Link>
-                  );
-                })}
-              </div>
-
-              {sectionIdx < navItems.length - 1 && (
-                <Separator className="my-4" />
-              )}
+      {/* Navigation Section - This should scroll */}
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-2">
+          {/* Quick Stats Overview */}
+          <div className="mb-6 p-4 rounded-xl bg-gradient-to-br from-gray-800/40 to-gray-900/40 border border-gray-700/30 backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">OVERVIEW</h3>
+              <BarChart3 className="w-4 h-4 text-blue-400" />
             </div>
-          ))}
-        </nav>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-2 rounded-lg bg-gray-800/30 text-center">
+                <div className="text-lg font-bold text-white">24</div>
+                <div className="text-xs text-gray-400">Active</div>
+              </div>
+              <div className="p-2 rounded-lg bg-gray-800/30 text-center">
+                <div className="text-lg font-bold text-emerald-400">98%</div>
+                <div className="text-xs text-gray-400">Uptime</div>
+              </div>
+            </div>
+          </div>
+
+          <nav className="space-y-2">
+            {navItems.map((section, sectionIdx) => (
+              <div key={sectionIdx} className="space-y-2">
+                {section.title && (
+                  <div className="flex items-center gap-2 px-2">
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 py-1">
+                      {section.title}
+                    </h4>
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+                  </div>
+                )}
+
+                <div className="space-y-1">
+                  {section.items.map((item) => {
+                    const isActive = item.href === activeHref;
+                    const Icon = getIconComponent(item.icon);
+
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "group relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 overflow-hidden",
+                          isActive
+                            ? "bg-gradient-to-r from-blue-900/30 via-blue-900/20 to-purple-900/30 text-white shadow-lg"
+                            : "text-gray-400 hover:text-white hover:bg-gray-800/40"
+                        )}
+                      >
+                        {/* Active Glow Effect */}
+                        {isActive && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5" />
+                        )}
+
+                        {/* Animated Indicator */}
+                        <div className={cn(
+                          "absolute left-0 w-1 h-6 rounded-r-full transition-all duration-300",
+                          isActive
+                            ? "bg-gradient-to-b from-blue-400 to-purple-400"
+                            : "group-hover:bg-gray-600"
+                        )} />
+
+                        {/* Icon Container */}
+                        <div className={cn(
+                          "relative z-10 flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-300",
+                          isActive
+                            ? "bg-gradient-to-br from-blue-500 to-purple-500 text-white shadow-md"
+                            : "bg-gray-800/60 text-gray-400 group-hover:bg-gray-700 group-hover:text-white"
+                        )}>
+                          <Icon className="h-4 w-4" />
+
+                          {/* Sparkle for Active */}
+                          {isActive && (
+                            <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-yellow-400" />
+                          )}
+                        </div>
+
+                        {/* Text & Badge */}
+                        <div className="relative z-10 flex-1 flex items-center justify-between">
+                          <span className="font-medium">{item.title}</span>
+
+                          <div className="flex items-center gap-2">
+                            {item.badge && (
+                              <Badge
+                                variant={isActive ? "default" : "secondary"}
+                                className={cn(
+                                  "rounded-full px-2 py-0.5 text-xs font-bold border-0",
+                                  isActive
+                                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                                    : "bg-gray-800 text-gray-300"
+                                )}
+                              >
+                                {item.badge}
+                              </Badge>
+                            )}
+
+                            <ChevronRight className={cn(
+                              "w-4 h-4 transition-transform duration-300",
+                              isActive
+                                ? "text-white transform translate-x-1"
+                                : "text-gray-500 group-hover:text-gray-300 group-hover:transform translate-x-1"
+                            )} />
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                {sectionIdx < navItems.length - 1 && (
+                  <Separator className="my-4 bg-gradient-to-r from-transparent via-gray-800 to-transparent h-px border-0" />
+                )}
+              </div>
+            ))}
+          </nav>
+        </div>
       </ScrollArea>
 
-      {/* User */}
-      <div className="border-t p-4">
-        <p className="text-sm font-medium">{userInfo.name}</p>
-        <p className="text-xs text-muted-foreground capitalize">
-          {userInfo.role.toLowerCase()}
-        </p>
+      {/* User Profile Section - Fixed at bottom */}
+      <div className="border-t border-gray-800/50 p-4 bg-gradient-to-t from-gray-900 to-transparent shrink-0">
+        <div className="flex items-center gap-3 group cursor-pointer p-3 rounded-xl hover:bg-gray-800/30 transition-all">
+          {/* Avatar with Status */}
+          <div className="relative">
+            <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center border-2 border-gray-800">
+              <span className="text-lg font-bold text-white">
+                {userInfo.name?.charAt(0).toUpperCase()}
+              </span>
+
+              {/* Role Badge */}
+              {userInfo.role === 'ADMIN' && (
+                <div className="absolute -top-1 -right-1">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center">
+                    <Crown className="w-3 h-3 text-white" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Online Status */}
+            <div className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-gray-900" />
+          </div>
+
+          {/* User Info */}
+          <div className="flex-1 overflow-hidden">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-bold text-white truncate">{userInfo.name}</p>
+              {userInfo.role === 'ADMIN' && (
+                <Shield className="w-3 h-3 text-blue-400" />
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-xs font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent capitalize">
+                {userInfo.role.toLowerCase()}
+              </span>
+              <span className="text-xs text-gray-500">•</span>
+              <span className="text-xs text-gray-400">Premium</span>
+            </div>
+          </div>
+
+          {/* Dropdown Arrow */}
+          <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-gray-300 rotate-90" />
+        </div>
       </div>
     </div>
   );

@@ -1,108 +1,46 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { X, FilterX } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
+import { cn } from "@/lib/utils";
 
 interface ClearFiltersButtonProps {
-    /**
-     * Array of param names to exclude from clearing (e.g., ['page', 'limit'])
-     * These params will be preserved when clearing filters
-     */
     preserveParams?: string[];
-
-    /**
-     * Array of param names to exclude from count (e.g., ['page', 'sort', 'order'])
-     * These params won't be counted as filters but will still be cleared
-     */
     excludeFromCount?: string[];
-
-    /**
-     * Custom onClick handler that runs before clearing
-     * Return false to prevent default clear behavior
-     */
     onBeforeClear?: () => boolean | void;
-
-    /**
-     * Custom onClick handler that runs after clearing
-     */
     onAfterClear?: () => void;
-
-    /**
-     * Button variant
-     */
     variant?: "ghost" | "outline" | "destructive" | "secondary";
-
-    /**
-     * Button size
-     */
     size?: "default" | "sm" | "lg" | "icon";
-
-    /**
-     * Custom className
-     */
     className?: string;
-
-    /**
-     * Custom label
-     */
     label?: string;
-
-    /**
-     * Show count of active filters
-     */
     showCount?: boolean;
+    showIcon?: boolean;
 }
 
-/**
- * Reusable Clear Filters Button Component
- *
- * Automatically counts active filters (excluding preserved params)
- * and clears all URL parameters when clicked.
- *
- * @example
- * // Basic usage
- * <ClearFiltersButton />
- *
- * @example
- * // Preserve page and limit params
- * <ClearFiltersButton preserveParams={['page', 'limit']} />
- *
- * @example
- * // With custom handlers
- * <ClearFiltersButton
- *   onBeforeClear={() => {
- *     console.log('Clearing filters...');
- *     return true; // proceed with clear
- *   }}
- *   onAfterClear={() => {
- *     console.log('Filters cleared!');
- *   }}
- * />
- */
 const ClearFiltersButton = ({
     preserveParams = [],
     excludeFromCount = ["page", "limit", "sortBy", "sortOrder"],
     onBeforeClear,
     onAfterClear,
-    variant = "ghost",
+    variant = "outline",
     size = "default",
-    className = "h-10 px-3",
+    className = "",
     label = "Clear",
     showCount = true,
+    showIcon = true,
 }: ClearFiltersButtonProps) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [isPending, startTransition] = useTransition();
 
-    // Count active filters (excluding preserved params and excluded from count params)
     const activeFiltersCount = Array.from(searchParams.keys()).filter(
         (key) => !preserveParams.includes(key) && !excludeFromCount.includes(key)
     ).length;
 
     const handleClear = () => {
-        // Run before clear handler
         if (onBeforeClear) {
             const shouldProceed = onBeforeClear();
             if (shouldProceed === false) return;
@@ -110,7 +48,6 @@ const ClearFiltersButton = ({
 
         const params = new URLSearchParams();
 
-        // Preserve specified params
         preserveParams.forEach((param) => {
             const value = searchParams.get(param);
             if (value) {
@@ -119,7 +56,6 @@ const ClearFiltersButton = ({
         });
 
         startTransition(() => {
-            // If no params to preserve, just go to base path
             if (params.toString()) {
                 router.push(`?${params.toString()}`);
             } else {
@@ -127,11 +63,9 @@ const ClearFiltersButton = ({
             }
         });
 
-        // Run after clear handler
         onAfterClear?.();
     };
 
-    // Don't render if no active filters
     if (activeFiltersCount === 0) {
         return null;
     }
@@ -142,11 +76,24 @@ const ClearFiltersButton = ({
             size={size}
             onClick={handleClear}
             disabled={isPending}
-            className={className}
+            className={cn(
+                "group transition-all duration-300 hover:scale-105 active:scale-95",
+                className
+            )}
         >
-            <X className="h-4 w-4 mr-1" />
+            {showIcon && (
+                <FilterX className={cn(
+                    "h-4 w-4",
+                    label ? "mr-2" : "",
+                    isPending && "animate-spin"
+                )} />
+            )}
             {label}
-            {showCount && ` (${activeFiltersCount})`}
+            {showCount && (
+                <span className="ml-2 h-5 w-5 rounded-full bg-primary/10 text-primary text-xs font-medium flex items-center justify-center group-hover:scale-110 transition-transform">
+                    {activeFiltersCount}
+                </span>
+            )}
         </Button>
     );
 };
