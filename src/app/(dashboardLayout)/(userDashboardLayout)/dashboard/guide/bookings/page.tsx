@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+export const dynamic = "force-dynamic";
 import EmptyState from "@/components/shared/EmptyState";
 import { getBookingsForGuide } from "@/services/guide/getBookingsForGuide";
 import {
@@ -139,7 +139,7 @@ const GuideBookingsPage = async () => {
                     </div>
 
                     {/* Filter & Search Bar */}
-                    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                    {/* <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="flex-1">
                                 <div className="relative">
@@ -161,7 +161,7 @@ const GuideBookingsPage = async () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Bookings Grid */}

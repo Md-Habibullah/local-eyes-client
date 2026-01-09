@@ -1,5 +1,5 @@
 
-
+export const dynamic = "force-dynamic";
 import PieChartCard from "@/components/charts/PieChartCard";
 import EmptyState from "@/components/shared/EmptyState";
 import { getDashboardStats } from "@/services/tourist/getDashboardStats";

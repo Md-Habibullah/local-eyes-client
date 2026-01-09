@@ -429,10 +429,12 @@
   @keyframes fade-in {
     from {
       opacity: 0;
+      transform: translateY(-10px);
     }
 
     to {
       opacity: 1;
+      transform: translateY(0);
     }
   }
 
@@ -513,7 +515,15 @@
   }
 
   .animate-fade-in {
-    animation: fade-in 0.3s ease-out;
+    animation: fade-in 0.5s ease-out;
+  }
+
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+
+  .hover\:-translate-y-0\.5:hover {
+    transform: translateY(-2px);
   }
 
   .animate-scale-in {

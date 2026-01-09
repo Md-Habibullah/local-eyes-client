@@ -11,7 +11,7 @@ import { AlertCircle } from "lucide-react";
 export default async function ProfilePage() {
   const user = await getUserInfo();
   const userFetchData = await getCurrentUser();
-  const userData = userFetchData.data;
+  const userData = userFetchData?.data;
 
   if (!user) {
     return <EmptyState icon={AlertCircle} title="Failed to load user data." />;

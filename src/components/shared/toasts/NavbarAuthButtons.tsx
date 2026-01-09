@@ -38,7 +38,7 @@ export default function NavbarAuthButtons({
                         </span>
                     </Button>
                 </Link>
-                <UserDropdown userInfo={userInfo} />
+                <UserDropdown userData={userInfo} userInfo={userInfo} />
             </div>
         );
     }

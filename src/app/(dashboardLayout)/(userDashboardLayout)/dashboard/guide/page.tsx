@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+export const dynamic = "force-dynamic";
 import PieChartCard from "@/components/charts/PieChartCard";
 import EmptyState from "@/components/shared/EmptyState";
 import { getGuideStats } from "@/services/guide/getGuideStats";

@@ -49,7 +49,9 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
         if (initialFilters) {
             setFilters(prev => ({
                 ...prev,
-                ...initialFilters
+                ...initialFilters,
+                // Ensure languages is always an array
+                languages: initialFilters.languages || []
             }));
         }
     }, [initialFilters]);
@@ -57,10 +59,10 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
     const loadData = async () => {
         setLoading(true);
         try {
-            const [destinations, tourCategories] = (await Promise.all([
+            const [destinations, tourCategories] = await Promise.all([
                 getPopularDestinations(),
                 getTourCategories()
-            ])) as [string[], string[]];
+            ]);
 
             setPopularDestinations(destinations);
             setCategories(tourCategories);
@@ -84,7 +86,7 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
         if (filters.minPrice && filters.minPrice > 0) params.append('minPrice', filters.minPrice.toString());
         if (filters.maxPrice && filters.maxPrice < 500) params.append('maxPrice', filters.maxPrice.toString());
         if (filters.date) params.append('date', filters.date);
-        if (filters.languages?.length) {
+        if (filters.languages && filters.languages.length > 0) {
             params.append('languages', filters.languages.join(','));
         }
 
@@ -106,12 +108,17 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
     };
 
     const toggleLanguage = (language: string) => {
-        setFilters(prev => ({
-            ...prev,
-            languages: prev.languages?.includes(language)
-                ? prev.languages.filter(l => l !== language)
-                : [...(prev.languages || []), language]
-        }));
+        setFilters(prev => {
+            const currentLanguages = prev.languages || [];
+            const newLanguages = currentLanguages.includes(language)
+                ? currentLanguages.filter(l => l !== language)
+                : [...currentLanguages, language];
+
+            return {
+                ...prev,
+                languages: newLanguages
+            };
+        });
     };
 
     const categoryLabels: Record<string, string> = {
@@ -144,7 +151,7 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
                         <Input
                             placeholder="Search tours by keyword, location, or guide..."
                             className="pl-10"
-                            value={filters.searchTerm}
+                            value={filters.searchTerm || ""}
                             onChange={(e) => setFilters({ ...filters, searchTerm: e.target.value })}
                         />
                     </div>
@@ -156,7 +163,7 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
                             <Label>Destination</Label>
                         </div>
                         <Select
-                            value={filters.city}
+                            value={filters.city || ""}
                             onValueChange={(value) => setFilters({ ...filters, city: value })}
                         >
                             <SelectTrigger>
@@ -180,7 +187,10 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
                                         key={city}
                                         variant={filters.city === city ? "default" : "outline"}
                                         className="cursor-pointer hover:bg-primary/10"
-                                        onClick={() => setFilters({ ...filters, city: filters.city === city ? "" : city })}
+                                        onClick={() => setFilters({
+                                            ...filters,
+                                            city: filters.city === city ? "" : city
+                                        })}
                                     >
                                         {city}
                                     </Badge>
@@ -221,7 +231,7 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
                                 <Label>Price Range</Label>
                             </div>
                             <span className="text-sm font-medium">
-                                ${filters.minPrice} - ${filters.maxPrice}
+                                ${filters.minPrice || 0} - ${filters.maxPrice || 500}
                             </span>
                         </div>
                         <Slider
@@ -229,8 +239,8 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
                             max={1000}
                             step={10}
                             value={[filters.minPrice || 0, filters.maxPrice || 500]}
-                            onValueChange={(value) => {
-                                const [min, max] = value as number[];
+                            onValueChange={(value: number[]) => {
+                                const [min, max] = value;
                                 setFilters({ ...filters, minPrice: min, maxPrice: max });
                             }}
                             className="py-4"
@@ -250,7 +260,7 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
                         </div>
                         <Input
                             type="date"
-                            value={filters.date}
+                            value={filters.date || ""}
                             onChange={(e) => setFilters({ ...filters, date: e.target.value })}
                             min={new Date().toISOString().split('T')[0]}
                         />
@@ -267,7 +277,7 @@ export default function SearchModal({ isOpen, onClose, initialFilters }: SearchM
                                 <div key={language} className="flex items-center space-x-2">
                                     <Checkbox
                                         id={`lang-${language}`}
-                                        checked={filters.languages?.includes(language)}
+                                        checked={filters.languages?.includes(language) || false}
                                         onCheckedChange={() => toggleLanguage(language)}
                                     />
                                     <Label

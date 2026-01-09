@@ -2,7 +2,7 @@ import { serverFetch } from "@/lib/server-fetch";
 
 
 export const getMyTours = async () => {
-    const res = await serverFetch.get("/listings/my-listings", { cache: "no-store" });
+    const res = await serverFetch.get("/listings/my-listings");
 
     const result = await res.json();
 

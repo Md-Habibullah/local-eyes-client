@@ -3,7 +3,7 @@
 import EmptyState from "@/components/shared/EmptyState";
 import { Button } from "@/components/ui/button";
 import { getBookingById } from "@/services/tourist/getBookingById";
-import { AlertCircle, Calendar, Clock, DollarSign, MapPin, User, CheckCircle, XCircle, Clock as ClockIcon, ArrowLeft, Star, FileText, Award, Navigation, Phone, Mail, Globe } from "lucide-react";
+import { AlertCircle, Calendar, Clock, DollarSign, MapPin, User, CheckCircle, XCircle, Clock as ClockIcon, ArrowLeft, Star, FileText, Award, Navigation, Phone, Mail, Globe, CreditCard } from "lucide-react";
 import Link from "next/link";
 
 const BookingDetails = async ({ params }: { params: Promise<{ id: string }> }) => {
@@ -11,6 +11,7 @@ const BookingDetails = async ({ params }: { params: Promise<{ id: string }> }) =
 
     const booking = await getBookingById(id);
     const isReviewAllowed = booking?.status === "COMPLETED";
+    const isPaymentAvailable = booking?.status === "CONFIRMED"; // Add payment check
 
     if (!booking) {
         return (
@@ -178,10 +179,27 @@ const BookingDetails = async ({ params }: { params: Promise<{ id: string }> }) =
                         </div>
 
                         <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-sky-50 dark:from-blue-900/10 dark:to-sky-900/10 rounded-xl">
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                <StatusIcon className="w-4 h-4 inline mr-2" />
-                                {statusConfig.description}
-                            </p>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <StatusIcon className="w-4 h-4" />
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        {statusConfig.description}
+                                    </p>
+                                </div>
+
+                                {/* Pay Now Button (Only for confirmed bookings) */}
+                                {isPaymentAvailable && (
+                                    <Button
+                                        asChild
+                                        className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex items-center gap-2"
+                                    >
+                                        <Link href={`/dashboard/tourist/bookings/${booking?.id}/payment`}>
+                                            <CreditCard className="w-4 h-4" />
+                                            Pay Now
+                                        </Link>
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -352,6 +370,51 @@ const BookingDetails = async ({ params }: { params: Promise<{ id: string }> }) =
                                 )}
                             </div>
                         </div>
+
+                        {/* Payment Action Card (Only for confirmed bookings) */}
+                        {isPaymentAvailable && (
+                            <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl shadow-sm border border-green-200 dark:border-green-800/30 p-6">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 flex items-center justify-center">
+                                        <CreditCard className="w-6 h-6 text-green-600 dark:text-green-400" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Complete Payment</h3>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                            Secure payment to confirm your booking
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-gray-600 dark:text-gray-400">Amount Due</span>
+                                            <span className="text-xl font-bold text-gray-900 dark:text-white">
+                                                ৳ {booking?.totalAmount}
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                            Payment must be completed before the tour date
+                                        </p>
+                                    </div>
+
+                                    <Button
+                                        asChild
+                                        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex items-center justify-center gap-2"
+                                    >
+                                        <Link href={`/dashboard/tourist/bookings/${booking?.id}/payment`}>
+                                            <CreditCard className="w-5 h-5" />
+                                            Pay Now
+                                        </Link>
+                                    </Button>
+
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                                        Secure payment powered by SSL encryption
+                                    </p>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Booking Summary Card */}
                         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">

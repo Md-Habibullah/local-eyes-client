@@ -3,6 +3,7 @@ import TourCard from "@/components/modules/Tour/TourCard";
 import EmptyState from "@/components/shared/EmptyState";
 import { getMyTours } from "@/services/guide/getMyTours";
 import { AlertCircle, MapPin, Plus, Filter, Search, Grid, List, Star, TrendingUp, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 const ToursPage = async () => {
     const tours = await getMyTours()
@@ -20,7 +21,9 @@ const ToursPage = async () => {
                     </p>
                     <button className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-medium transition-all hover:shadow-lg">
                         <Plus className="w-5 h-5" />
-                        Create Your First Tour
+                        <Link href={'/dashboard/guide/tours/create'}>
+                            Create Your First Tour
+                        </Link>
                     </button>
                 </div>
             </div>
@@ -64,10 +67,13 @@ const ToursPage = async () => {
                                 <span className="font-medium text-blue-600 dark:text-blue-400">{tours.length}</span>
                                 <span className="ml-2 text-gray-600 dark:text-gray-400">Total Tours</span>
                             </div>
-                            <button className="flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-medium transition-all hover:shadow-lg">
+                            <Link
+                                href="/dashboard/guide/tours/create"
+                                className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-medium transition-all hover:shadow-lg"
+                            >
                                 <Plus className="w-5 h-5" />
                                 Create Tour
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
@@ -128,7 +134,7 @@ const ToursPage = async () => {
                     </div>
 
                     {/* Search & Filter Bar */}
-                    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                    {/* <div className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="flex-1">
                                 <div className="relative">
@@ -155,7 +161,7 @@ const ToursPage = async () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Tours Grid */}

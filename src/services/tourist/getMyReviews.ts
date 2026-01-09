@@ -3,7 +3,7 @@
 import { serverFetch } from "@/lib/server-fetch";
 
 export const getMyReviews = async () => {
-    const res = await serverFetch.get("/reviews", { cache: "no-store" });
+    const res = await serverFetch.get("/reviews");
     const result = await res.json();
 
     if (!res.ok || result.success === 'false') {

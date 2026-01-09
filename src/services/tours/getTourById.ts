@@ -1,3 +1,4 @@
+"use server"
 import { serverFetch } from "@/lib/server-fetch";
 
 export const getTourByID = async (id: string) => {

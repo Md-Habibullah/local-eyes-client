@@ -5,6 +5,7 @@
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { updateTourSchema } from "@/zod/tour.validation";
+import { revalidatePath } from "next/cache";
 
 export const updateTour = async (
     _currentState: any,
@@ -60,6 +61,9 @@ export const updateTour = async (
         });
 
         const result = await res.json();
+
+        revalidatePath("/dashboard/guide/tours");
+        revalidatePath("/tours");
         return result;
     } catch (error: any) {
         if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;

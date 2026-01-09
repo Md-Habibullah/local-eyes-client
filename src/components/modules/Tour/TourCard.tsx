@@ -17,20 +17,20 @@ const TourCard = ({ tour }: any) => {
                     {/* Top Badges */}
                     <div className="absolute top-3 left-3 flex flex-col gap-2">
                         {tour.isFeatured && (
-                            <div className="px-2 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-full flex items-center gap-1">
+                            <div className="px-2 py-1 bg-linear-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-full flex items-center gap-1">
                                 <Star className="w-3 h-3" />
                                 Featured
                             </div>
                         )}
                         {tour.isActive === false && (
-                            <div className="px-2 py-1 bg-gradient-to-r from-gray-600 to-gray-700 text-white text-xs font-bold rounded-full">
+                            <div className="px-2 py-1 bg-linear-to-r from-gray-600 to-gray-700 text-white text-xs font-bold rounded-full">
                                 Inactive
                             </div>
                         )}
                     </div>
 
                     {/* Bottom Overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                    <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-4">
                         <div className="flex items-center justify-between">
                             <div className="text-white font-bold text-lg">${tour.price}</div>
                             <div className="flex items-center gap-1 text-white">
@@ -61,7 +61,7 @@ const TourCard = ({ tour }: any) => {
 
                     {/* Location */}
                     <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-3">
-                        <MapPin className="w-4 h-4 flex-shrink-0" />
+                        <MapPin className="w-4 h-4 shrink-0" />
                         <span className="text-sm truncate">
                             {tour.city}
                             {tour.country ? `, ${tour.country}` : ""}
@@ -72,21 +72,21 @@ const TourCard = ({ tour }: any) => {
                     <div className="space-y-2 mb-4">
                         {tour.duration && (
                             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                                <Clock className="w-4 h-4 flex-shrink-0" />
+                                <Clock className="w-4 h-4 shrink-0" />
                                 <span className="text-sm">{tour.duration}</span>
                             </div>
                         )}
 
                         {tour.maxGroupSize && (
                             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                                <Users className="w-4 h-4 flex-shrink-0" />
+                                <Users className="w-4 h-4 shrink-0" />
                                 <span className="text-sm">Max {tour.maxGroupSize} people</span>
                             </div>
                         )}
 
                         {tour.startDates && tour.startDates.length > 0 && (
                             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                                <Calendar className="w-4 h-4 flex-shrink-0" />
+                                <Calendar className="w-4 h-4 shrink-0" />
                                 <span className="text-sm">
                                     {new Date(tour.startDates[0]).toLocaleDateString()}
                                 </span>

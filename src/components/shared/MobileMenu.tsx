@@ -1,17 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { UserInfo } from "@/types/user.interface";
 import { LayoutDashboard, Menu, X } from "lucide-react";
 import Link from "next/link";
-import UserDropdown from "../modules/Dashboard/UserDropdown";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Separator } from "../ui/separator";
+import UserDropdown from "../modules/Dashboard/UserDropdown";
 
 interface MobileMenuProps {
     navItems: Array<{ href: string; label: string }>;
     hasAccessToken: boolean;
     userInfo?: UserInfo | null;
+    userData?: any | null;
     dashboardRoute?: string;
 }
 
@@ -69,7 +71,7 @@ const MobileMenu = ({
                                             </Link>
                                         </SheetTrigger>
                                         <div className="flex justify-center">
-                                            <UserDropdown userInfo={userInfo} />
+                                            <UserDropdown userData={userInfo} userInfo={userInfo} />
                                         </div>
                                     </>
                                 ) : (

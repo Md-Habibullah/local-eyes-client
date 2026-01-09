@@ -9,7 +9,7 @@ const ReviewPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
     if (!booking) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-900 dark:to-amber-950/20 p-4 md:p-6">
+            <div className="min-h-screen bg-linear-to-br from-amber-50 to-orange-50 dark:from-gray-900 dark:to-amber-950/20 p-4 md:p-6">
                 <div className="max-w-4xl mx-auto">
                     <EmptyState
                         icon={AlertCircle}
@@ -23,7 +23,7 @@ const ReviewPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
     if (booking && booking.error) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-900 dark:to-amber-950/20 p-4 md:p-6">
+            <div className="min-h-screen bg-linear-to-br from-amber-50 to-orange-50 dark:from-gray-900 dark:to-amber-950/20 p-4 md:p-6">
                 <div className="max-w-4xl mx-auto">
                     <EmptyState
                         icon={AlertCircle}
@@ -38,7 +38,7 @@ const ReviewPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     // Validate the ID
     if (!id) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-900 dark:to-amber-950/20 p-4 md:p-6">
+            <div className="min-h-screen bg-linear-to-br from-amber-50 to-orange-50 dark:from-gray-900 dark:to-amber-950/20 p-4 md:p-6">
                 <div className="max-w-4xl mx-auto">
                     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-red-200 dark:border-red-800/30 p-8 text-center">
                         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">

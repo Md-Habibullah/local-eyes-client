@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import RemoveWishlistButton from "@/components/modules/Home/RemoveWishlistButton";
-import EmptyState from "@/components/shared/EmptyState";
 import { getWishlist } from "@/services/tourist/getWishlist";
 import { AlertCircle, Heart, MapPin, User, Star, Calendar, DollarSign, ArrowRight, Sparkles, Compass } from "lucide-react";
 import Link from "next/link";
@@ -11,7 +10,7 @@ const WishlistPage = async () => {
 
     if (!wishlist.length) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-50 dark:from-gray-900 dark:to-pink-950/20 p-4 md:p-6">
+            <div className="min-h-screen bg-linear-to-br from-pink-50 to-rose-50 dark:from-gray-900 dark:to-pink-950/20 p-4 md:p-6">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center py-16">
                         <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center">
@@ -25,7 +24,7 @@ const WishlistPage = async () => {
                         </p>
                         <Link
                             href="/tours"
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-pink-600 to-rose-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity"
                         >
                             <Compass className="w-4 h-4" />
                             Explore Tours
@@ -38,18 +37,18 @@ const WishlistPage = async () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-50 dark:from-gray-900 dark:to-pink-950/20 p-4 md:p-6">
+        <div className="min-h-screen bg-linear-to-br from-pink-50 to-rose-50 dark:from-gray-900 dark:to-pink-950/20 p-4 md:p-6">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 flex items-center justify-center">
+                                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 flex items-center justify-center">
                                     <Heart className="w-6 h-6 text-pink-600 dark:text-pink-400" />
                                 </div>
                                 <div>
-                                    <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
+                                    <h1 className="text-3xl font-bold bg-linear-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
                                         My Wishlist
                                     </h1>
                                     <p className="text-gray-600 dark:text-gray-400 mt-1">
@@ -139,7 +138,7 @@ const WishlistPage = async () => {
 
                 {/* Action Footer */}
                 <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                    <div className="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/10 dark:to-rose-900/10 rounded-2xl p-6">
+                    <div className="bg-linear-to-r from-pink-50 to-rose-50 dark:from-pink-900/10 dark:to-rose-900/10 rounded-2xl p-6">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center">
@@ -154,7 +153,7 @@ const WishlistPage = async () => {
                             </div>
                             <Link
                                 href="/tours"
-                                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity"
+                                className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-pink-600 to-rose-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity"
                             >
                                 <Compass className="w-4 h-4" />
                                 Explore More Tours
@@ -176,7 +175,7 @@ const WishlistCard = ({ item }: WishlistCardProps) => {
     return (
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 group">
             {/* Image Section */}
-            <div className="relative h-48 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 overflow-hidden">
+            <div className="relative h-48 bg-linear-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center">
                     <MapPin className="w-16 h-16 text-pink-300 dark:text-pink-700/50" />
                 </div>
@@ -210,7 +209,7 @@ const WishlistCard = ({ item }: WishlistCardProps) => {
                 {/* Guide Info */}
                 <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-sky-100 dark:from-blue-900/30 dark:to-sky-900/30 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-linear-to-r from-blue-100 to-sky-100 dark:from-blue-900/30 dark:to-sky-900/30 flex items-center justify-center">
                             <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div className="flex-1">
@@ -255,12 +254,12 @@ const WishlistCard = ({ item }: WishlistCardProps) => {
                 <div className="flex gap-3">
                     <Link
                         href={`/tours/${item.tour.id}`}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity text-sm"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-linear-to-r from-pink-600 to-rose-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity text-sm"
                     >
                         View Details
                         <ArrowRight className="w-4 h-4" />
                     </Link>
-                    <button className="px-4 py-3 bg-gradient-to-r from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/20 text-blue-700 dark:text-blue-400 font-medium rounded-full border border-blue-200 dark:border-blue-800/30 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors text-sm">
+                    <button className="px-4 py-3 bg-linear-to-r from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/20 text-blue-700 dark:text-blue-400 font-medium rounded-full border border-blue-200 dark:border-blue-800/30 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors text-sm">
                         Book Now
                     </button>
                 </div>

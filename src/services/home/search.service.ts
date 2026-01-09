@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { serverFetch } from "@/lib/server-fetch";
+const BACKEND_API_URL =
+    process.env.NEXT_PUBLIC_BASE_API_URL || "https://local-eyes-server.vercel.app/api/v1";
 
 export interface SearchFilters {
     searchTerm?: string;
@@ -10,120 +11,145 @@ export interface SearchFilters {
     minPrice?: number;
     maxPrice?: number;
     date?: string;
-    duration?: number;
     languages?: string[];
     page?: number;
     limit?: number;
 }
 
 export interface SearchResult {
-    tours: any[];
-    total: number;
-    page: number;
-    limit: number;
-    filters: SearchFilters;
+    data: any[];
+    meta: {
+        page: number;
+        limit: number;
+        total: number;
+    };
 }
 
-export async function searchTours(filters: SearchFilters = {}): Promise<SearchResult> {
+export async function searchTours(
+    filters: SearchFilters = {}
+): Promise<SearchResult> {
     try {
-        // Build query parameters
         const params = new URLSearchParams();
 
-        // Add filters
-        if (filters.searchTerm) params.append('searchTerm', filters.searchTerm);
-        if (filters.city) params.append('city', filters.city);
-        if (filters.category) params.append('category', filters.category);
-        if (filters.minPrice) params.append('minPrice', filters.minPrice.toString());
-        if (filters.maxPrice) params.append('maxPrice', filters.maxPrice.toString());
-        if (filters.page) params.append('page', filters.page.toString());
-        if (filters.limit) params.append('limit', filters.limit.toString());
+        if (filters.searchTerm) params.set("searchTerm", filters.searchTerm);
+        if (filters.city) params.set("city", filters.city);
+        if (filters.category) params.set("category", filters.category);
+        if (filters.minPrice !== undefined)
+            params.set("minPrice", filters.minPrice.toString());
+        if (filters.maxPrice !== undefined)
+            params.set("maxPrice", filters.maxPrice.toString());
+        if (filters.page) params.set("page", filters.page.toString());
+        if (filters.limit) params.set("limit", filters.limit.toString());
 
-        // Add languages as multiple params
-        if (filters.languages?.length) {
-            filters.languages.forEach(lang => params.append('languages', lang));
-        }
+        const endpoint = `${BACKEND_API_URL}/listings?${params.toString()}`;
 
-        const endpoint = `/listings?${params.toString()}`;
+        console.log("🚀 FETCHING TOURS:", endpoint);
 
-        const response = await serverFetch.get(endpoint);
+        const response = await fetch(endpoint, {
+            method: "GET",
+            cache: "no-store", // 🔥 THIS IS THE KEY FIX
+        });
 
         if (!response.ok) {
             throw new Error(`Search failed: ${response.status}`);
         }
 
-        const data = await response.json();
+        const json = await response.json();
 
         return {
-            tours: data.data || [],
-            total: data.meta?.total || 0,
-            page: data.meta?.page || 1,
-            limit: data.meta?.limit || 10,
-            filters
+            data: json.data ?? [],
+            meta: {
+                page: json.meta?.page ?? filters.page ?? 1,
+                limit: json.meta?.limit ?? filters.limit ?? 12,
+                total: json.meta?.total ?? 0,
+            },
         };
-
     } catch (error) {
-        console.error("Error searching tours:", error);
+        console.error("❌ Error searching tours:", error);
         return {
-            tours: [],
-            total: 0,
-            page: 1,
-            limit: 10,
-            filters
+            data: [],
+            meta: {
+                page: filters.page ?? 1,
+                limit: filters.limit ?? 12,
+                total: 0,
+            },
         };
     }
 }
 
-export async function getPopularDestinations() {
+/* ===============================
+   OPTIONAL HELPERS (FIXED TOO)
+   =============================== */
+
+export async function getPopularDestinations(): Promise<string[]> {
     try {
-        // Get tours and extract unique cities
-        const response = await serverFetch.get("/listings?limit=50");
+        const res = await fetch(`${BACKEND_API_URL}/listings?limit=100`, {
+            cache: "no-store",
+        });
 
-        if (!response.ok) {
-            return [];
-        }
+        if (!res.ok) return [];
 
-        const data = await response.json();
-        const tours = data.data || [];
+        const json = await res.json();
+        const tours = json.data ?? [];
 
-        // Count city occurrences
-        const cityCounts = tours.reduce((acc: Record<string, number>, tour: any) => {
-            if (tour.city) {
-                acc[tour.city] = (acc[tour.city] || 0) + 1;
-            }
-            return acc;
-        }, {});
+        const cityCounts = tours.reduce(
+            (acc: Record<string, number>, tour: any) => {
+                if (tour.city) acc[tour.city] = (acc[tour.city] || 0) + 1;
+                return acc;
+            },
+            {}
+        );
 
-        // Sort by count and get top 10
         return Object.entries(cityCounts)
-            .sort(([, a], [, b]) => (b as number) - (a as number))
+            .sort(([, a], [, b]) => Number(b) - Number(a))
             .slice(0, 10)
             .map(([city]) => city);
-
-    } catch (error) {
-        console.error("Error getting popular destinations:", error);
-        return ["Dhaka", "Chittagong", "Sylhet", "Cox's Bazar"];
+    } catch {
+        return [];
     }
 }
 
-export async function getTourCategories() {
+export async function getTourCategories(): Promise<string[]> {
     try {
-        // Get all tours and extract unique categories
-        const response = await serverFetch.get("/listings?limit=100");
+        const res = await fetch(`${BACKEND_API_URL}/listings?limit=100`, {
+            cache: "no-store",
+        });
 
-        if (!response.ok) {
-            return [];
-        }
+        if (!res.ok) return [];
 
-        const data = await response.json();
-        const tours = data.data || [];
+        const json = await res.json();
+        const tours = json.data ?? [];
 
-        // Get unique categories
-        const categories = [...new Set(tours.map((tour: any) => tour.category))].filter(Boolean);
+        const categories: any = [
+            ...new Set(tours.map((t: any) => t.category).filter(Boolean)),
+        ];
 
-        return categories.length > 0 ? categories : ["ADVENTURE", "FOOD", "HISTORY", "NATURE", "CULTURE"];
-
-    } catch (error) {
-        console.error("Error getting tour categories:", error);
-        return ["ADVENTURE", "FOOD", "HISTORY", "NATURE", "CULTURE"];
+        return categories.length
+            ? categories
+            : [
+                "ADVENTURE",
+                "FOOD",
+                "HISTORY",
+                "NATURE",
+                "CULTURE",
+                "PHOTOGRAPHY",
+                "SHOPPING",
+                "NIGHTLIFE",
+                "SPORTS",
+                "ART",
+            ];
+    } catch {
+        return [
+            "ADVENTURE",
+            "FOOD",
+            "HISTORY",
+            "NATURE",
+            "CULTURE",
+            "PHOTOGRAPHY",
+            "SHOPPING",
+            "NIGHTLIFE",
+            "SPORTS",
+            "ART",
+        ];
     }
 }

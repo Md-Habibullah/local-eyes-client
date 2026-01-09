@@ -20,11 +20,6 @@ export default async function HomePage() {
     getTestimonials()
   ]);
 
-  // Log results for debugging (remove in production)
-  console.log("Tours result:", toursResult);
-  console.log("Guides result:", guidesResult);
-  console.log("Testimonials result:", testimonialsResult);
-
   return (
     <div className="min-h-screen bg-linear-to-b from-background via-background/95 to-background">
       {/* Hero Section */}

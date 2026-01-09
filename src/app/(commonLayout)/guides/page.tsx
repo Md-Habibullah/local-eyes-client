@@ -1,46 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense } from "react";
-// import GuidesGrid from "./_components/GuidesGrid";
 import { Search, Sparkles, Users, Globe, Award, Shield } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { getGuides } from "@/services/guide/getGuides";
-import GuidesGrid from "@/components/modules/Guide/GuidesGrid";
+import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = {
     title: "Expert Local Guides | Travel with Locals",
     description: "Discover passionate local guides ready to create unforgettable experiences for you.",
 };
 
-// Static generation with revalidation
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 3600;
 
-export default async function GuidesPage({
-    searchParams,
-}: {
-    searchParams: { [key: string]: string | string[] | undefined };
-}) {
-
-    // Fetch filtered guides based on search params
-    const initialGuides = await getGuides();
+export default async function GuidesPage() {
+    const guides = await getGuides();
 
     return (
         <div className="min-h-screen bg-linear-to-b from-background via-primary/5 to-background">
             {/* Hero Section */}
             <div className="relative overflow-hidden">
-                {/* Background Effects */}
                 <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-pink-500/10" />
                 <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl" />
                 <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500/20 rounded-full blur-3xl" />
 
                 <div className="relative container mx-auto px-4 py-16 lg:py-24">
                     <div className="max-w-3xl mx-auto text-center">
-                        {/* Badge */}
                         <div className="inline-flex items-center gap-2 bg-linear-to-r from-primary/20 to-pink-500/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-primary/30">
                             <Sparkles className="h-4 w-4 text-primary" />
                             <span className="text-sm font-medium text-primary">Expert Local Guides</span>
                         </div>
 
-                        {/* Main Title */}
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
                             Meet Your Perfect
                             <span className="block text-transparent bg-linear-to-r from-primary via-primary to-pink-500 bg-clip-text">
@@ -48,16 +39,14 @@ export default async function GuidesPage({
                             </span>
                         </h1>
 
-                        {/* Description */}
                         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                             Connect with passionate locals who know their cities inside out.
                             From hidden gems to cultural insights, experience destinations through the eyes of those who call them home.
                         </p>
 
-                        {/* Stats */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-2xl mx-auto mb-10">
                             <div className="text-center p-4 rounded-xl bg-linear-to-b from-card/50 to-card/30 backdrop-blur-sm border border-white/10">
-                                <div className="text-3xl font-bold text-primary mb-1">500+</div>
+                                <div className="text-3xl font-bold text-primary mb-1">{guides.length}+</div>
                                 <div className="text-sm text-muted-foreground">Expert Guides</div>
                             </div>
                             <div className="text-center p-4 rounded-xl bg-linear-to-b from-card/50 to-card/30 backdrop-blur-sm border border-white/10">
@@ -78,7 +67,7 @@ export default async function GuidesPage({
             </div>
 
             {/* Search Bar */}
-            <div className="container mx-auto px-4 -mt-8 relative z-10">
+            {/* <div className="container mx-auto px-4 -mt-8 relative z-10">
                 <div className="max-w-4xl mx-auto">
                     <div className="bg-linear-to-br from-card via-card/95 to-card/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-6 md:p-8">
                         <div className="flex flex-col md:flex-row gap-4 items-center">
@@ -101,7 +90,7 @@ export default async function GuidesPage({
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Features Section */}
             <div className="container mx-auto px-4 py-12">
@@ -136,51 +125,128 @@ export default async function GuidesPage({
                 </div>
             </div>
 
-            {/* Main Content */}
+            {/* Guides List */}
             <div className="container mx-auto px-4 py-12">
-                <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Filters Sidebar */}
-                    {/* <div className="lg:w-1/4">
-                        <div className="sticky top-24">
-                            <GuidesFilter />
-                        </div>
-                    </div> */}
-
-                    {/* Guides Grid */}
-                    <div className="lg:w-3/4">
-                        {/* Header */}
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-                            <div>
-                                <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                                    Available Guides
-                                    <span className="text-primary ml-2">({initialGuides.length})</span>
-                                </h2>
-                                <p className="text-muted-foreground">
-                                    Filter and connect with expert local guides
-                                </p>
-                            </div>
-                            <Button
-                                variant="outline"
-                                className="border-primary/20 hover:border-primary/40"
-                            >
-                                <Users className="h-4 w-4 mr-2" />
-                                Sort by: Recommended
-                            </Button>
-                        </div>
-
-                        {/* Loading State */}
-                        <Suspense fallback={<GuidesGridSkeleton />}>
-                            <GuidesGrid initialGuides={initialGuides} />
-                        </Suspense>
-                    </div>
+                <div className="mb-8">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                        Available Guides
+                        <span className="text-primary ml-2">({guides.length})</span>
+                    </h2>
+                    <p className="text-muted-foreground">
+                        Click on any guide to view detailed information
+                    </p>
                 </div>
+
+                <Suspense fallback={<GuidesListSkeleton />}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {guides.map((guide: any) => (
+                            <Link
+                                href={`/guides/${guide.id}`}
+                                key={guide.id}
+                                className="group"
+                            >
+                                <div className="bg-linear-to-br from-card via-card/95 to-card/90 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-primary/30 hover:shadow-xl transition-all duration-300 hover:scale-[1.02] h-full">
+                                    <div className="flex items-start space-x-4 mb-6">
+                                        <div className="relative">
+                                            {/* Profile Photo with Next.js Image */}
+                                            <div className="relative">
+                                                {guide.profilePhoto ? (
+                                                    <div className="h-20 w-20 rounded-full overflow-hidden relative">
+                                                        <Image
+                                                            src={guide.profilePhoto}
+                                                            alt={guide.name || "Guide"}
+                                                            fill
+                                                            className="object-cover"
+                                                            sizes="80px"
+                                                            priority={false}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="h-20 w-20 rounded-full bg-linear-to-r from-primary to-pink-500 flex items-center justify-center text-white text-2xl font-bold">
+                                                        {guide.name?.charAt(0) || "G"}
+                                                    </div>
+                                                )}
+                                                {guide.isVerified && (
+                                                    <div className="absolute -top-1 -right-1 bg-green-500 rounded-full p-1">
+                                                        <Shield className="h-3 w-3 text-white" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
+                                                {guide.name || "Local Guide"}
+                                            </h3>
+                                            <div className="flex items-center text-sm text-muted-foreground mb-2">
+                                                <Globe className="h-3 w-3 mr-1" />
+                                                {guide.address || "Various Cities"}, {guide.country || "Worldwide"}
+                                            </div>
+                                            {guide.rating && (
+                                                <div className="flex items-center">
+                                                    <span className="text-yellow-500">★</span>
+                                                    <span className="ml-1 text-sm font-medium">
+                                                        {guide.rating.toFixed(1)}
+                                                    </span>
+                                                    <span className="ml-1 text-sm text-muted-foreground">
+                                                        ({guide.reviewCount || 0} reviews)
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <p className="text-sm text-muted-foreground line-clamp-2">
+                                            {guide.bio || "Passionate local guide with extensive knowledge of the area."}
+                                        </p>
+
+                                        {guide.expertise && guide.expertise.length > 0 && (
+                                            <div className="flex flex-wrap gap-2 pt-2">
+                                                {guide.expertise.slice(0, 3).map((skill: string, index: number) => (
+                                                    <span
+                                                        key={index}
+                                                        className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary border border-primary/20"
+                                                    >
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                                {guide.expertise.length > 3 && (
+                                                    <span className="px-2 py-1 text-xs rounded-full bg-muted text-muted-foreground">
+                                                        +{guide.expertise.length - 3} more
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        <div className="pt-4 border-t border-white/10">
+                                            <div className="flex justify-between items-center">
+                                                <div>
+                                                    <span className="text-lg font-bold text-primary">
+                                                        ${guide.dailyRate || 50}
+                                                    </span>
+                                                    <span className="text-sm text-muted-foreground ml-1">/hour</span>
+                                                </div>
+                                                <Button
+                                                    size="sm"
+                                                    className="bg-linear-to-r from-primary to-primary/80 hover:shadow-md"
+                                                >
+                                                    View Profile
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </Suspense>
             </div>
 
             {/* CTA Section */}
             <div className="container mx-auto px-4 py-16">
                 <div className="max-w-4xl mx-auto text-center">
                     <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-primary/20 via-primary/10 to-pink-500/20 p-12">
-                        {/* Background Pattern */}
                         <div className="absolute inset-0 bg-grid-white/5 bg-[size:20px_20px]" />
                         <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 rounded-full blur-3xl" />
 
@@ -216,7 +282,7 @@ export default async function GuidesPage({
 }
 
 // Skeleton loading component
-function GuidesGridSkeleton() {
+function GuidesListSkeleton() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import LoginSuccessToast from "@/components/shared/toasts/LoginSuccessToast";
 import LogoutSuccessToast from "@/components/shared/toasts/LogoutSuccessToast";
 import type { Metadata } from "next";

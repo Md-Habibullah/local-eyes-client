@@ -14,7 +14,6 @@ export const getBookingById = async (id: string) => {
     );
 
     const result = await res.json();
-    console.log("resultFromService", result)
 
     if (!res.ok || result.success === 'false') {
         return { error: result.message || "Failed to get booking" };

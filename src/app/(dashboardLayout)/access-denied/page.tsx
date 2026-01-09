@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 export default function AccessDenied() {
     return (
         <div className="flex h-full items-center justify-center">

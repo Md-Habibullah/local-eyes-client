@@ -1,27 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import CancelBookingButton from "@/components/bookings/CancelBookingButton";
 import EmptyState from "@/components/shared/EmptyState";
 import { serverFetch } from "@/lib/server-fetch";
+import { cancelBookingAction } from "@/services/tourist/cancelBooking";
 import { getBookings } from "@/services/tourist/getBookings";
-import { AlertCircle, Calendar, MapPin, Clock, ArrowRight, XCircle, CheckCircle, Clock as ClockIcon, DollarSign, Users, ChevronLeft, ChevronRight, ExternalLink, Compass } from "lucide-react";
+import {
+    AlertCircle,
+    Calendar,
+    MapPin,
+    Clock,
+    ArrowRight,
+    XCircle,
+    CheckCircle,
+    Clock as ClockIcon,
+    DollarSign,
+    Users,
+    ChevronLeft,
+    ChevronRight,
+    ExternalLink,
+    Compass,
+    Image as ImageIcon,
+    CreditCard,
+    AlertTriangle
+} from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function TouristBookingsPage({
     searchParams,
 }: {
-    searchParams: { page?: string };
+    searchParams: { page: string };
 }) {
-    const page = Number(searchParams.page || 1);
-    const result = await getBookings(page);
-
-    if (!result) {
-        return (
-            <EmptyState
-                icon={AlertCircle}
-                title="Failed to load bookings."
-                description="We couldn't retrieve your bookings at the moment. Please try again later."
-            />
-        );
-    }
+    // const { page } = await searchParams;
+    const pageNum = Number(searchParams.page) || Number(1);
+    const result = await getBookings(pageNum);
 
     if (result && result.error) {
         return (
@@ -69,13 +81,13 @@ export default async function TouristBookingsPage({
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-50 dark:from-gray-900 dark:to-blue-950/20 p-4 md:p-6">
+        <div className="min-h-screen bg-linear-to-br from-sky-50 to-blue-50 dark:from-gray-900 dark:to-blue-950/20 p-4 md:p-6">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                         <div>
-                            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent">
+                            <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent">
                                 My Bookings
                             </h1>
                             <p className="text-gray-600 dark:text-gray-400 mt-2">
@@ -109,7 +121,7 @@ export default async function TouristBookingsPage({
                         </p>
                         <Link
                             href="/tours"
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-sky-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-blue-600 to-sky-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity"
                         >
                             <Compass className="w-4 h-4" />
                             Explore Tours
@@ -123,6 +135,9 @@ export default async function TouristBookingsPage({
                     {result.data.map((booking: any) => {
                         const StatusIcon = getStatusConfig(booking.status).icon;
                         const statusConfig = getStatusConfig(booking.status);
+                        const tourImage = booking.tour?.images?.[0];
+                        const isPaymentRequired = booking.status === "CONFIRMED" && !booking.isPaid;
+                        const isOverdue = isPaymentRequired && new Date(booking.date) < new Date();
 
                         return (
                             <div
@@ -133,9 +148,21 @@ export default async function TouristBookingsPage({
                                     {/* Left Section - Tour Info */}
                                     <div className="flex-1">
                                         <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-                                            {/* Tour Image Placeholder */}
-                                            <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-blue-100 to-sky-100 dark:from-blue-900/30 dark:to-sky-900/30 flex items-center justify-center flex-shrink-0">
-                                                <MapPin className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                            {/* Tour Image */}
+                                            <div className="w-20 h-20 rounded-xl overflow-hidden relative bg-gray-100 dark:bg-gray-900 shrink-0">
+                                                {tourImage ? (
+                                                    <Image
+                                                        src={tourImage}
+                                                        alt={booking.tour.title}
+                                                        fill
+                                                        className="object-cover"
+                                                        sizes="80px"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gradient-to-br from-blue-100 to-sky-100 dark:from-blue-900/30 dark:to-sky-900/30 flex items-center justify-center">
+                                                        <ImageIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <div className="flex-1">
@@ -147,7 +174,7 @@ export default async function TouristBookingsPage({
                                                         <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400 mb-3">
                                                             <span className="flex items-center gap-1">
                                                                 <MapPin className="w-4 h-4" />
-                                                                {booking.tour.location}
+                                                                {booking.tour.location || `${booking.tour.city}, ${booking.tour.country}`}
                                                             </span>
                                                             <span className="hidden sm:inline">•</span>
                                                             <span className="flex items-center gap-1">
@@ -157,10 +184,25 @@ export default async function TouristBookingsPage({
                                                         </div>
                                                     </div>
 
-                                                    {/* Status Badge */}
-                                                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${statusConfig.bg} ${statusConfig.border} ${statusConfig.text} w-fit`}>
-                                                        <StatusIcon className="w-4 h-4" />
-                                                        <span className="text-sm font-medium">{statusConfig.label}</span>
+                                                    {/* Status Badge with Payment Warning */}
+                                                    <div className="flex flex-col items-end gap-2">
+                                                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${statusConfig.bg} ${statusConfig.border} ${statusConfig.text} w-fit`}>
+                                                            <StatusIcon className="w-4 h-4" />
+                                                            <span className="text-sm font-medium">{statusConfig.label}</span>
+                                                        </div>
+
+                                                        {/* Payment Required Badge */}
+                                                        {isPaymentRequired && (
+                                                            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${isOverdue
+                                                                ? "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800/30 text-red-700 dark:text-red-400"
+                                                                : "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800/30 text-amber-700 dark:text-amber-400"
+                                                                } w-fit`}>
+                                                                <AlertTriangle className="w-4 h-4" />
+                                                                <span className="text-sm font-medium">
+                                                                    {isOverdue ? "Payment Overdue" : "Payment Required"}
+                                                                </span>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
@@ -210,10 +252,22 @@ export default async function TouristBookingsPage({
                                                 </p>
                                             </div>
 
-                                            {/* Price Details */}
-                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                                <DollarSign className="w-4 h-4" />
-                                                <span>Paid in full</span>
+                                            {/* Payment Status */}
+                                            <div className="flex items-center gap-2 text-sm">
+                                                {booking.isPaid ? (
+                                                    <div className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                                                        <CheckCircle className="w-4 h-4" />
+                                                        <span>Paid</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className={`flex items-center gap-1 ${isOverdue
+                                                        ? "text-red-600 dark:text-red-400"
+                                                        : "text-amber-600 dark:text-amber-400"
+                                                        }`}>
+                                                        <DollarSign className="w-4 h-4" />
+                                                        <span>Payment Pending</span>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
 
@@ -221,34 +275,58 @@ export default async function TouristBookingsPage({
                                         <div className="flex flex-col sm:flex-row lg:flex-col gap-2">
                                             <Link
                                                 href={`/dashboard/tourist/bookings/${booking.id}`}
-                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-sky-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity text-sm"
+                                                className="flex items-center justify-center gap-2 px-4 py-2 bg-linear-to-r from-blue-600 to-sky-600 text-white font-medium rounded-full hover:opacity-90 transition-opacity text-sm"
                                             >
                                                 View Details
                                                 <ExternalLink className="w-4 h-4" />
                                             </Link>
 
-                                            {booking.status === "PENDING" && (
-                                                <form
-                                                    action={async () => {
-                                                        "use server";
-                                                        await serverFetch.patch(
-                                                            `/bookings/${booking.id}/cancel`
-                                                        );
-                                                    }}
-                                                    className="flex-1"
+                                            {/* Payment Required Button */}
+                                            {isPaymentRequired && (
+                                                <Link
+                                                    href={`/dashboard/tourist/bookings/${booking.id}/payment`}
+                                                    className={`flex items-center justify-center gap-2 px-4 py-2 font-medium rounded-full hover:opacity-90 transition-opacity text-sm ${isOverdue
+                                                        ? "bg-linear-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700"
+                                                        : "bg-linear-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700"
+                                                        }`}
                                                 >
-                                                    <button
-                                                        type="submit"
-                                                        className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-900/10 text-red-700 dark:text-red-400 font-medium rounded-full border border-red-200 dark:border-red-800/30 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors text-sm"
-                                                    >
-                                                        <XCircle className="w-4 h-4" />
-                                                        Cancel Booking
-                                                    </button>
-                                                </form>
+                                                    <CreditCard className="w-4 h-4" />
+                                                    {isOverdue ? "Pay Now (Overdue)" : "Pay Now"}
+                                                </Link>
+                                            )}
+
+                                            {booking.status === "PENDING" && (
+                                                <CancelBookingButton bookingId={booking.id} />
                                             )}
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Payment Warning Message */}
+                                {isPaymentRequired && (
+                                    <div className={`mt-4 p-3 rounded-lg border ${isOverdue
+                                        ? "bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800/30"
+                                        : "bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800/30"
+                                        }`}>
+                                        <div className="flex items-start gap-2">
+                                            <AlertTriangle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${isOverdue ? "text-red-600 dark:text-red-400" : "text-amber-600 dark:text-amber-400"
+                                                }`} />
+                                            <div>
+                                                <p className={`text-sm font-medium ${isOverdue ? "text-red-800 dark:text-red-300" : "text-amber-800 dark:text-amber-300"
+                                                    }`}>
+                                                    {isOverdue
+                                                        ? "⚠️ Your payment is overdue! Please complete payment immediately to avoid cancellation."
+                                                        : "ℹ️ Payment required to confirm your booking. Please complete payment before the tour date."
+                                                    }
+                                                </p>
+                                                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                                    Tour date: {new Date(booking.date).toLocaleDateString()}
+                                                    {isOverdue && " (PAST DUE)"}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         );
                     })}
@@ -260,18 +338,20 @@ export default async function TouristBookingsPage({
                         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div className="text-sm text-gray-600 dark:text-gray-400">
                                 Showing <span className="font-semibold text-gray-900 dark:text-white">
-                                    {((page - 1) * result.meta.limit) + 1}
+                                    {((pageNum - 1) * result.meta.limit) + 1}
                                 </span> to <span className="font-semibold text-gray-900 dark:text-white">
-                                    {Math.min(page * result.meta.limit, result.meta.total)}
+                                    {Math.min(pageNum * result.meta.limit, result.meta.total)}
                                 </span> of <span className="font-semibold text-gray-900 dark:text-white">
                                     {result.meta.total}
                                 </span> bookings
                             </div>
 
                             <div className="flex items-center gap-2">
-                                {page > 1 && (
+                                {pageNum > 1 && (
                                     <Link
-                                        href={`?page=${page - 1}`}
+                                        href={`?page=${pageNum - 1}`}
+                                        scroll={false}
+                                        prefetch={false}
                                         className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
                                     >
                                         <ChevronLeft className="w-4 h-4" />
@@ -281,7 +361,7 @@ export default async function TouristBookingsPage({
 
                                 <div className="flex items-center gap-1">
                                     {Array.from({ length: Math.ceil(result.meta.total / result.meta.limit) }, (_, i) => i + 1)
-                                        .filter(p => p === 1 || p === page || p === page - 1 || p === page + 1 || p === Math.ceil(result.meta.total / result.meta.limit))
+                                        .filter(p => p === 1 || p === pageNum || p === pageNum - 1 || p === pageNum + 1 || p === Math.ceil(result.meta.total / result.meta.limit))
                                         .map((p, index, array) => (
                                             <div key={p} className="flex items-center">
                                                 {index > 0 && array[index - 1] !== p - 1 && (
@@ -290,8 +370,8 @@ export default async function TouristBookingsPage({
                                                 <Link
                                                     href={`?page=${p}`}
                                                     className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium transition-colors
-                                                        ${p === page
-                                                            ? 'bg-gradient-to-r from-blue-600 to-sky-600 text-white'
+                                                        ${p === pageNum
+                                                            ? 'bg-linear-to-r from-blue-600 to-sky-600 text-white'
                                                             : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
                                                         }`}
                                                 >
@@ -301,9 +381,11 @@ export default async function TouristBookingsPage({
                                         ))}
                                 </div>
 
-                                {page * result.meta.limit < result.meta.total && (
+                                {pageNum * result.meta.limit < result.meta.total && (
                                     <Link
-                                        href={`?page=${page + 1}`}
+                                        href={`?page=${pageNum + 1}`}
+                                        scroll={false}
+                                        prefetch={false}
                                         className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
                                     >
                                         Next

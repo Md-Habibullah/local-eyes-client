@@ -1,7 +1,7 @@
 "use client";
 
 import { registerUser } from "@/services/auth/registerUser";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import {
@@ -12,9 +12,13 @@ import {
 } from "./ui/field";
 import { Input } from "./ui/input";
 import InputFieldError from "./shared/loaders/InputFieldError";
+import { Eye, EyeOff, User, MapPin, Mail, Key, Lock, Briefcase, Users, Shield, ArrowRight, CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 const RegisterForm = () => {
   const [state, formAction, isPending] = useActionState(registerUser, null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     if (state && !state.success && state.message) {
@@ -23,104 +27,229 @@ const RegisterForm = () => {
   }, [state]);
 
   return (
-    <div className="relative z-10 pointer-events-auto">
-      <form action={formAction}>
+    <div className="w-full">
+      {/* Success Message */}
+      {state?.success && (
+        <div className="mb-6 p-4 bg-linear-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+              <CheckCircle className="w-5 h-5 text-emerald-600" />
+            </div>
+            <div>
+              <p className="font-semibold text-emerald-800">Account created successfully!</p>
+              <p className="text-sm text-emerald-700">Please check your email to verify your account.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <form action={formAction} className="space-y-6">
         <FieldGroup>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Name */}
             <Field>
-              <FieldLabel htmlFor="name">Full Name</FieldLabel>
-              <Input id="name" name="name" type="text" />
+              <FieldLabel htmlFor="name" className="flex items-center gap-2">
+                <User className="w-4 h-4" />
+                Full Name
+              </FieldLabel>
+              <div className="relative">
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="John Doe"
+                  className="pl-10 h-11 rounded-lg"
+                />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               <InputFieldError field="name" state={state} />
             </Field>
 
             {/* Address */}
             <Field>
-              <FieldLabel htmlFor="address">Address</FieldLabel>
-              <Input id="address" name="address" type="text" />
+              <FieldLabel htmlFor="address" className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                Address
+              </FieldLabel>
+              <div className="relative">
+                <Input
+                  id="address"
+                  name="address"
+                  type="text"
+                  placeholder="123 Main St, City"
+                  className="pl-10 h-11 rounded-lg"
+                />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               <InputFieldError field="address" state={state} />
             </Field>
 
             {/* Email */}
             <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input id="email" name="email" type="email" />
+              <FieldLabel htmlFor="email" className="flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                Email
+              </FieldLabel>
+              <div className="relative">
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="john@example.com"
+                  className="pl-10 h-11 rounded-lg"
+                />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               <InputFieldError field="email" state={state} />
             </Field>
 
             {/* Role */}
             <Field>
-              <FieldLabel htmlFor="role">Role</FieldLabel>
-              <select
-                id="role"
-                name="role"
-                className="w-full border rounded-md px-3 py-2"
-                defaultValue="TOURIST"
-              >
-                <option value="TOURIST">Tourist</option>
-                <option value="GUIDE">Guide</option>
-              </select>
+              <FieldLabel htmlFor="role" className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4" />
+                Role
+              </FieldLabel>
+              <div className="relative">
+                <select
+                  id="role"
+                  name="role"
+                  className="w-full border rounded-lg px-10 py-2.5 h-11 appearance-none bg-white"
+                  defaultValue="TOURIST"
+                >
+                  <option value="TOURIST">Tourist</option>
+                  <option value="GUIDE">Guide</option>
+                </select>
+                <Briefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               <InputFieldError field="role" state={state} />
             </Field>
 
             {/* Gender */}
             <Field>
-              <FieldLabel htmlFor="gender">Gender</FieldLabel>
-              <select
-                id="gender"
-                name="gender"
-                className="w-full border rounded-md px-3 py-2"
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Select gender
-                </option>
-                <option value="MALE">Male</option>
-                <option value="FEMALE">Female</option>
-                <option value="OTHER">Other</option>
-              </select>
+              <FieldLabel htmlFor="gender" className="flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                Gender
+              </FieldLabel>
+              <div className="relative">
+                <select
+                  id="gender"
+                  name="gender"
+                  className="w-full border rounded-lg px-10 py-2.5 h-11 appearance-none bg-white"
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    Select gender
+                  </option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="OTHER">Other</option>
+                </select>
+                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               <InputFieldError field="gender" state={state} />
             </Field>
 
-            {/* Daily rate
-            <Field>
-              <FieldLabel htmlFor="dailyRate">Daily Rate</FieldLabel>
-              <Input id="dailyRate" name="dailyRate" type="number" />
-              <InputFieldError field="dailyRate" state={state} />
-            </Field> */}
-
             {/* Password */}
             <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
-              <Input id="password" name="password" type="password" />
+              <FieldLabel htmlFor="password" className="flex items-center gap-2">
+                <Key className="w-4 h-4" />
+                Password
+              </FieldLabel>
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Create a password"
+                  className="pl-10 pr-10 h-11 rounded-lg"
+                />
+                <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               <InputFieldError field="password" state={state} />
             </Field>
 
             {/* Confirm Password */}
             <Field className="md:col-span-2">
-              <FieldLabel htmlFor="confirmPassword">
+              <FieldLabel htmlFor="confirmPassword" className="flex items-center gap-2">
+                <Lock className="w-4 h-4" />
                 Confirm Password
               </FieldLabel>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-              />
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm your password"
+                  className="pl-10 pr-10 h-11 rounded-lg"
+                />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               <InputFieldError field="confirmPassword" state={state} />
             </Field>
           </div>
 
-          <FieldGroup className="mt-4">
+          {/* Security Tips */}
+          <div className="mt-6 p-4 bg-linear-to-r from-blue-50 to-sky-50 rounded-xl border border-blue-100">
+            <div className="flex items-start gap-3">
+              <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-blue-800 mb-1">Password Security Tips</p>
+                <ul className="text-xs text-blue-700 space-y-1">
+                  <li>• Use at least 8 characters with mixed case letters</li>
+                  <li>• Include numbers and special characters for strength</li>
+                  <li>• Avoid using personal information</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <FieldGroup className="mt-8">
             <Field>
-              <Button type="submit" disabled={isPending}>
-                {isPending ? "Creating Account..." : "Create Account"}
+              <Button
+                type="submit"
+                disabled={isPending || state?.success}
+                className="w-full h-12 rounded-xl bg-linear-to-r from-blue-600 to-sky-600 hover:from-blue-700 hover:to-sky-700 text-white font-semibold"
+              >
+                {isPending ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating Account...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    Create Account
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
+                )}
               </Button>
 
-              <FieldDescription className="px-6 text-center">
-                Already have an account?{" "}
-                <a href="/login" className="text-blue-600 hover:underline">
-                  Sign in
-                </a>
+              <FieldDescription className="text-center mt-4">
+                <span className="text-gray-600">
+                  Already have an account?{" "}
+                  <Link
+                    href="/login"
+                    className="font-semibold text-blue-600 hover:text-blue-800 transition-colors"
+                  >
+                    Sign in
+                  </Link>
+                </span>
               </FieldDescription>
             </Field>
           </FieldGroup>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import LogoutButton from "@/components/shared/toasts/LogoutButton";
@@ -36,14 +37,16 @@ import {
   Building,
   Users
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 interface UserDropdownProps {
   userInfo: UserInfo;
+  userData: any;
 }
 
-const UserDropdown = ({ userInfo }: UserDropdownProps) => {
+const UserDropdown = ({ userInfo, userData }: UserDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -77,9 +80,25 @@ const UserDropdown = ({ userInfo }: UserDropdownProps) => {
 
           {/* Avatar Container */}
           <div className="relative w-10 h-10 rounded-full bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center border-2 border-gray-800 group-hover:border-blue-500/50 transition-all duration-300 shadow-lg">
-            <span className="text-sm font-bold text-white">
+            {/* <span className="text-sm font-bold text-white">
               {userInfo?.name?.charAt(0).toUpperCase()}
-            </span>
+            </span> */}
+            {userData?.profile?.profilePhoto ? (
+              <Image
+                src={userData.profile.profilePhoto}
+                alt={userData.profile.name.charAt(0).toUpperCase() || "User"}
+                fill
+                className="object-cover rounded-4xl"
+                sizes="80px"
+                priority={false}
+              />
+            ) : (
+              <div className="w-full h-full bg-primary text-primary-foreground flex items-center justify-center rounded-full font-semibold">
+                {userData?.profile?.name?.charAt(0).toUpperCase() ||
+                  userData?.email?.charAt(0).toUpperCase() ||
+                  "U"}
+              </div>
+            )}
 
             {/* Role Badge */}
             <div className="absolute -bottom-1 -right-1">
@@ -111,9 +130,23 @@ const UserDropdown = ({ userInfo }: UserDropdownProps) => {
               {/* Large Avatar */}
               <div className="relative">
                 <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center border-2 border-gray-800/50 shadow-xl">
-                  <span className="text-2xl font-bold text-white">
+                  {/* <span className="text-2xl font-bold text-white">
                     {userInfo?.name?.charAt(0).toUpperCase()}
-                  </span>
+                  </span> */}
+                  {userData?.profile?.profilePhoto ? (
+                    <Image
+                      src={userData.profile.profilePhoto}
+                      alt={userData.profile.name?.charAt(0).toUpperCase() || "User"}
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-primary text-primary-foreground flex items-center justify-center rounded-full font-semibold">
+                      {userData?.profile?.name?.charAt(0).toUpperCase() ||
+                        userData?.email?.charAt(0).toUpperCase() ||
+                        "U"}
+                    </div>
+                  )}
                 </div>
                 <div className="absolute -top-1 -right-1">
                   <div className="w-7 h-7 rounded-full bg-linear-to-r from-amber-500 to-orange-500 flex items-center justify-center">

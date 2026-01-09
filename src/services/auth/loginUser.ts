@@ -9,14 +9,20 @@ import z from "zod";
 import { setCookie } from "./tokenHandlers";
 
 const loginValidationZodSchema = z.object({
-    email: z.email({
-        message: "Email is required",
-    }),
-    password: z.string("Password is required").min(6, {
-        error: "Password is required and must be at least 6 characters long",
-    }).max(100, {
-        error: "Password must be at most 100 characters long",
-    }),
+    email: z
+        .string({ error: "Email is required" })
+        .refine((val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+            message: "Please provide a valid email address",
+        }),
+
+    password: z
+        .string({ error: "Password is required" })
+        .min(6, {
+            message: "Password must be at least 6 characters long",
+        })
+        .max(100, {
+            message: "Password must be at most 100 characters long",
+        })
 });
 
 export const loginUser = async (_currentState: any, formData: any): Promise<any> => {
@@ -28,6 +34,8 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             email: formData.get('email'),
             password: formData.get('password'),
         }
+
+        console.log(loginData)
 
         const validatedFields = loginValidationZodSchema.safeParse(loginData);
 
@@ -43,7 +51,7 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             }
         }
 
-        const res = await fetch("http://localhost:5000/api/v1/auth/login", {
+        const res = await fetch("https://local-eyes-server.vercel.app/api/v1/auth/login", {
             method: "POST",
             body: JSON.stringify(loginData),
             headers: {

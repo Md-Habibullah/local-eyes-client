@@ -59,14 +59,22 @@ export default function TeamMembers() {
                 >
                     <div className="aspect-square relative overflow-hidden">
                         <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent z-10" />
-                        <Image
-                            src={member.image}
-                            alt={member.name}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                            className="object-cover group-hover:scale-105 transition-transform duration-700"
-                            priority={index < 2} // Only prioritize first 2 images
-                        />
+                        {member.image ? (
+                            <Image
+                                src={member.image}
+                                alt={member.name}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                priority={index < 2} // Only prioritize first 2 images
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-primary text-primary-foreground flex items-center justify-center rounded-full font-semibold">
+                                {member?.name.charAt(0).toUpperCase() ||
+                                    "U"}
+                            </div>
+                        )}
+
                     </div>
 
                     <div className="p-6">

@@ -2,6 +2,7 @@
 "use server";
 
 import { serverFetch } from "@/lib/server-fetch";
+import { revalidatePath } from "next/cache";
 
 export const updateBookingStatus = async (
     bookingId: string,
@@ -26,7 +27,8 @@ export const updateBookingStatus = async (
             message: result?.message || "Failed to update booking",
         };
     }
-
+    revalidatePath("/dashboard/guide/bookings");
+    revalidatePath("/dashboard/tour/bookings");
     return {
         success: true,
         message: result?.message || `Booking marked as ${status}`,

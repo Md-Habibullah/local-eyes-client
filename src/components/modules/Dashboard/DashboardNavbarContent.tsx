@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -13,10 +15,12 @@ import UserDropdown from "./UserDropdown";
 
 const DashboardNavbarContent = ({
   userInfo,
+  userData,
   navItems,
   dashboardHome,
 }: {
   userInfo: UserInfo;
+  userData: any;
   navItems?: NavSection[];
   dashboardHome?: string;
 }) => {
@@ -64,7 +68,7 @@ const DashboardNavbarContent = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-linear-to-r from-gray-900/95 via-gray-900/95 to-gray-900/90 backdrop-blur-xl supports-[backdrop-filter]:bg-gray-900/80">
+    <header className="sticky top-0 z-50 w-full border-b bg-linear-to-r from-gray-900/95 via-gray-900/95 to-gray-900/90 backdrop-blur-xl supports-backdrop-filter:bg-gray-900/80">
       <div className="flex h-16 items-center justify-between gap-4 px-4 md:px-6">
         {/* Left Section - Mobile Menu & Page Title */}
         <div className="flex items-center gap-3 md:gap-4">
@@ -117,10 +121,10 @@ const DashboardNavbarContent = ({
         <div className="flex-1 max-w-2xl mx-4">
           <div className="relative group">
             {/* Search Icon */}
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 group-hover:text-gray-300 transition-colors" />
+            {/* <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 group-hover:text-gray-300 transition-colors" /> */}
 
             {/* Search Input */}
-            <Input
+            {/* <Input
               type="search"
               placeholder="Search across platform..."
               className={`pl-10 pr-20 py-6 bg-gray-800/50 border ${isSearchFocused
@@ -131,12 +135,12 @@ const DashboardNavbarContent = ({
               onChange={(e) => setSearch(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
-            />
+            /> */}
 
             {/* Search Actions */}
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
               {/* Clear Button */}
-              {search && (
+              {/* {search && (
                 <Button
                   variant="ghost"
                   size="icon"
@@ -145,10 +149,10 @@ const DashboardNavbarContent = ({
                 >
                   <X className="h-3 w-3 text-gray-400" />
                 </Button>
-              )}
+              )} */}
 
               {/* Filter Button */}
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="icon"
                 className={`h-7 w-7 rounded-lg ${showFilters
@@ -158,13 +162,13 @@ const DashboardNavbarContent = ({
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <Filter className="h-3 w-3 text-gray-400" />
-              </Button>
+              </Button> */}
 
               {/* Shortcut Hint */}
-              <div className="hidden lg:flex items-center gap-1 px-2 py-1 rounded bg-gray-800/70 border border-gray-700/50 ml-1">
+              {/* <div className="hidden lg:flex items-center gap-1 px-2 py-1 rounded bg-gray-800/70 border border-gray-700/50 ml-1">
                 <kbd className="text-xs text-gray-400">⌘</kbd>
                 <kbd className="text-xs text-gray-300">K</kbd>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -208,7 +212,7 @@ const DashboardNavbarContent = ({
           <div className="hidden md:block h-6 w-px bg-linear-to-b from-transparent via-gray-700 to-transparent mx-1" />
 
           {/* User Dropdown */}
-          <UserDropdown userInfo={userInfo} />
+          <UserDropdown userInfo={userInfo} userData={userData} />
         </div>
       </div>
 

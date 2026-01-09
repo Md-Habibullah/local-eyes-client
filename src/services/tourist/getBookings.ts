@@ -3,7 +3,12 @@ import { serverFetch } from "@/lib/server-fetch";
 export const getBookings = async (page = 1) => {
     const res = await serverFetch.get(
         `/bookings?page=${page}&limit=5`,
-        { cache: "no-store" }
+        {
+            // cache: 'force-cache',
+            next: {
+                revalidate: 120
+            }
+        }
     );
 
     const result = await res.json();

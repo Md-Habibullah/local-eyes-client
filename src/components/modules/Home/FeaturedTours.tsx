@@ -7,12 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { getTours } from "@/services/tours/getTours";
+import { getToursWithLimit } from "@/services/tours/getTours";
 
 export default async function FeaturedTours() {
-    // Fetch tours on the server
-    const toursData = await getTours();
-    const tours = toursData.slice(0, 6); // Limit to 6 featured tours
+
+    const tours = await getToursWithLimit(String(6))
 
     const CATEGORY_GRADIENTS: Record<string, string> = {
         FOOD: "from-orange-500 to-amber-500",
