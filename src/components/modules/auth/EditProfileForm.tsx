@@ -14,6 +14,7 @@ import {
     Heart, Sparkles, Loader2
 } from "lucide-react";
 import Image from "next/image";
+import { serverFetch } from "@/lib/server-fetch";
 
 type ProfileData = {
     id: string;
@@ -190,12 +191,15 @@ const EditProfileForm = ({ initialData }: EditProfileFormProps) => {
             }
 
             // Make the API call with credentials
-            const response = await fetch(`https://local-eyes-server.vercel.app/api/v1/users/${initialData.id}`, {
-                method: "PATCH",
-                credentials: "include", // This sends cookies automatically
+            // const response = await fetch(`https://local-eyes-server.vercel.app/api/v1/users/${initialData.id}`, {
+            //     method: "PATCH",
+            //     credentials: "include", // This sends cookies automatically
+            //     body: formDataToSend,
+            //     // Note: Don't set Content-Type header for FormData
+            //     // Don't set Authorization header if using cookies
+            // });
+            const response = await serverFetch.patch(`/users/${initialData.id}`, {
                 body: formDataToSend,
-                // Note: Don't set Content-Type header for FormData
-                // Don't set Authorization header if using cookies
             });
 
             const data = await response.json();

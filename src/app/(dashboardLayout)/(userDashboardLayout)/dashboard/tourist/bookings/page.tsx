@@ -29,10 +29,10 @@ import Image from "next/image";
 export default async function TouristBookingsPage({
     searchParams,
 }: {
-    searchParams: { page: string };
+    searchParams: Promise<{ page: string }>;
 }) {
-    // const { page } = await searchParams;
-    const pageNum = Number(searchParams.page) || Number(1);
+    const { page } = await searchParams;
+    const pageNum = Number(page) || Number(1);
     const result = await getBookings(pageNum);
 
     if (result && result.error) {
@@ -333,7 +333,7 @@ export default async function TouristBookingsPage({
                 </div>
 
                 {/* Pagination - Enhanced */}
-                {result.meta.total > 0 && (
+                {/* {result.meta.total > 0 && (
                     <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -395,7 +395,7 @@ export default async function TouristBookingsPage({
                             </div>
                         </div>
                     </div>
-                )}
+                )} */}
             </div>
         </div>
     );

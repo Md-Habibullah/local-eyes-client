@@ -39,7 +39,7 @@ export async function updateMyProfile(formData: FormData) {
         const result = await response.json();
 
         if (result.success) {
-            revalidateTag("user-info", { expire: 0 });
+            revalidateTag("user-info");
         }
         return result;
     } catch (error: any) {
@@ -128,7 +128,7 @@ export async function resetPassword(_prevState: any, formData: FormData) {
         }
 
         if (result.success) {
-            revalidateTag("user-info", { expire: 0 });
+            revalidateTag("user-info");
         }
 
         return {

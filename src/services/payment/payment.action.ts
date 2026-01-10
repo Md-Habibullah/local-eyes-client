@@ -2,6 +2,7 @@
 "use server";
 
 import { serverFetch } from "@/lib/server-fetch";
+import { revalidatePath } from "next/cache";
 
 /**
  * Server action to initiate payment for a booking
@@ -37,6 +38,8 @@ export const verifyPaymentStatus = async (bookingId: string) => {
         }
 
         const result = await response.json();
+        revalidatePath('/dashboard/tourist/bookings')
+        revalidatePath('/dashboard/guide/bookings')
         return result;
     } catch (error: any) {
         console.error("Payment verification error:", error);

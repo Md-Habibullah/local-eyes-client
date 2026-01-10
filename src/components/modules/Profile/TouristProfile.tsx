@@ -27,12 +27,12 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
                         </div>
 
                         <div className="flex items-center gap-4">
-                            <Link href="/my-profile/update">
+                            <div>
                                 <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white text-sm font-medium backdrop-blur-sm transition-all hover:scale-105 active:scale-95 border border-white/30">
                                     <Edit className="w-4 h-4" />
                                     Edit Profile
                                 </button>
-                            </Link>
+                            </div>
 
                             <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/25 to-white/10 backdrop-blur-sm flex items-center justify-center border-2 border-white/30 shadow-lg">
                                 <UserCircle className="w-7 h-7 text-white" />

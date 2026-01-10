@@ -11,20 +11,22 @@ import Link from "next/link";
 export const dynamic = 'force-dynamic'; // Disable static rendering
 export const revalidate = 0; // Disable caching
 
-interface ToursPageProps {
-    searchParams: {
-        searchTerm?: string;
-        category?: string;
-        page?: string;
-    };
+type ToursPageProps = {
+    searchParams?: Promise<{
+        searchTerm?: string
+        category?: string
+        page?: string
+    }>
 }
 
 export default async function ToursPage({ searchParams }: ToursPageProps) {
+    const params = await searchParams;
+
     // Parse filters from search params
     const filters = {
-        searchTerm: searchParams.searchTerm || "",
-        category: searchParams.category || "",
-        page: searchParams.page ? parseInt(searchParams.page) : 1,
+        searchTerm: params?.searchTerm || "",
+        category: params?.category || "",
+        page: params?.page ? parseInt(params?.page) : 1,
         limit: 6
     };
 

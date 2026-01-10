@@ -2,16 +2,16 @@ export const dynamic = 'force-dynamic'
 import LoginSuccessToast from "@/components/shared/toasts/LoginSuccessToast";
 import LogoutSuccessToast from "@/components/shared/toasts/LogoutSuccessToast";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const geistSans = Geist({
+const geistSans = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const geistMono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });

@@ -97,7 +97,7 @@ export default function HeroSection() {
         if (selectedCategory) {
             router.push(`/tours?category=${selectedCategory}&search=${encodeURIComponent(searchQuery)}`);
         } else if (searchQuery.trim()) {
-            router.push(`/tours?search=${encodeURIComponent(searchQuery)}`);
+            router.push(`/tours?searchTerm=${encodeURIComponent(searchQuery)}`);
         } else {
             router.push("/tours");
         }
