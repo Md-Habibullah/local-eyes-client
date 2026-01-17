@@ -80,12 +80,12 @@ const AboutPage = () => {
                                     Start Exploring
                                 </Button>
                             </Link>
-                            <Link href="/become-a-guide">
+                            <div>
                                 <Button size="lg" variant="outline" className="gap-2">
                                     <Users className="h-5 w-5" />
                                     Become a Guide
                                 </Button>
-                            </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

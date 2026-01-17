@@ -39,7 +39,7 @@ export async function getTopGuides() {
         console.log("Fetching top guides...");
 
         // Filter users by role=GUIDE and get only verified guides
-        const response = await serverFetch.get("/users?role=GUIDE&limit=8");
+        const response = await serverFetch.get("/guides");
 
         if (!response.ok) {
             console.error("Failed to fetch guides:", response.status);

@@ -11,6 +11,9 @@ import HowItWorks from "@/components/modules/Home/HowItWorks";
 import Testimonials from "@/components/modules/Home/Testimonials";
 import TestimonialsSkeleton from "@/components/modules/Home/TestimonialsSkeleton";
 import { getFeaturedTours, getTestimonials, getTopGuides } from "@/services/home/home-data";
+import CategorySection from "@/components/modules/Home/CategorySection";
+import WhyChooseUs from "@/components/modules/Home/WhyChooseUs";
+import ServicesSection from "@/components/modules/Home/ServicesSection";
 
 export default async function HomePage() {
   // Fetch all data on server in parallel
@@ -86,6 +89,14 @@ export default async function HomePage() {
           )}
         </div>
       </section>
+      <section className="py-20 bg-muted/30">
+        <CategorySection />
+      </section>
+      <section className="py-20 bg-muted/30">
+        <WhyChooseUs />
+      </section>
+
+      <ServicesSection />
 
       {/* How It Works */}
       <HowItWorks />
@@ -136,12 +147,11 @@ export default async function HomePage() {
             >
               Browse All Tours
             </Link>
-            <Link
-              href="/become-a-guide"
+            <div
               className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-md border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
             >
               Become a Guide
-            </Link>
+            </div>
           </div>
         </div>
       </section>
