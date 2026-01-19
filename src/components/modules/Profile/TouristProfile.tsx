@@ -3,17 +3,297 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { User, Mail, MapPin, Globe, Heart, Calendar, UserCircle, Languages, Edit, Compass, Star, Package, Award } from "lucide-react";
+import { User, Mail, MapPin, Globe, Heart, Calendar, UserCircle, Languages, Edit, Compass, Star, Package, Award, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
 type TouristProfileProps = {
     userData: any;
 };
 
-export default function TouristProfile({ userData }: TouristProfileProps) {
+// InfoRow Component (for mobile)
+const InfoRow = ({ icon, label, value }: any) => (
+    <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+        <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
+                {icon}
+            </div>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</span>
+        </div>
+        <span className="text-sm text-gray-900 dark:text-white font-medium truncate ml-2">
+            {value || "Not provided"}
+        </span>
+    </div>
+);
+
+// InfoCard Component (for desktop)
+const InfoCard = ({ icon, label, value, gradient, iconColor }: any) => (
+    <div className={`p-4 rounded-xl bg-gradient-to-br ${gradient} border border-gray-100 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-gray-900/30 transition-all duration-300 hover:-translate-y-1`}>
+        <div className="flex items-center gap-3 mb-2">
+            <div className={`p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm ${iconColor}`}>
+                {icon}
+            </div>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{label}</span>
+        </div>
+        <p className="text-lg font-semibold text-gray-900 dark:text-white truncate">{value}</p>
+    </div>
+);
+
+// Mobile Tourist Profile Component
+const MobileTouristProfile = ({ userData }: TouristProfileProps) => {
+    const { profile } = userData;
+    const [activeTab, setActiveTab] = useState("overview");
+
+    return (
+        <div className="md:hidden">
+            {/* Mobile Header */}
+            <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-4 relative overflow-hidden mb-4">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-24 translate-x-24"></div>
+
+                <div className="relative flex items-center justify-between">
+                    <div>
+                        <h2 className="text-xl font-bold text-white drop-shadow-lg">Tourist Profile</h2>
+                        <p className="text-emerald-100/90 text-sm">Traveler Information</p>
+                    </div>
+
+                    <Link href={'/my-profile/update'}>
+                        <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/20 text-white text-xs font-medium backdrop-blur-sm border border-white/30">
+                            <Edit className="w-3 h-3" />
+                            Edit
+                        </button>
+                    </Link>
+                </div>
+            </div>
+
+            {/* Mobile Profile Section */}
+            <div className="p-4">
+                {/* Profile Card */}
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="relative">
+                            <div className="relative w-20 h-20 rounded-xl overflow-hidden border-4 border-white dark:border-gray-800">
+                                {profile?.profilePhoto ? (
+                                    <Image
+                                        src={profile.profilePhoto}
+                                        alt={profile.name}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-100 dark:from-emerald-800 dark:via-teal-800 dark:to-cyan-900 flex items-center justify-center">
+                                        <User className="w-10 h-10 text-emerald-400 dark:text-emerald-300" />
+                                    </div>
+                                )}
+                            </div>
+                            {/* Status Badge */}
+                            <div className="absolute -top-1 -right-1">
+                                <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-2 py-0.5 rounded-full text-[10px] font-semibold flex items-center gap-0.5">
+                                    <Compass className="w-2 h-2" />
+                                    Explorer
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex-1">
+                            <h3 className="font-bold text-lg text-gray-900 dark:text-white truncate">
+                                {profile?.name || "Tourist User"}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 truncate mt-1">
+                                {userData.email}
+                            </p>
+                            <div className="mt-2">
+                                <span className="px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+                                    Traveler
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Stats */}
+                    <div className="grid grid-cols-3 gap-2 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+                        <div className="text-center">
+                            <div className="text-sm font-bold text-gray-900 dark:text-white">0</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Bookings</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-sm font-bold text-amber-600 dark:text-amber-400">0.0</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Rating</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-sm font-bold text-blue-600 dark:text-blue-400">0</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Countries</div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tabs */}
+                <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+                    {["overview", "preferences", "actions"].map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === tab
+                                ? "bg-emerald-600 text-white"
+                                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                                }`}
+                        >
+                            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Tab Content */}
+                {activeTab === "overview" && (
+                    <div className="space-y-4">
+                        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Personal Information</h3>
+                            <div className="space-y-4">
+                                <InfoRow icon={<User className="w-4 h-4" />} label="Full Name" value={profile?.name} />
+                                <InfoRow icon={<Mail className="w-4 h-4" />} label="Email" value={userData.email} />
+                                <InfoRow icon={<MapPin className="w-4 h-4" />} label="Location" value={profile?.address} />
+                                <InfoRow icon={<User className="w-4 h-4" />} label="Gender" value={profile?.gender} />
+                                <InfoRow icon={<Globe className="w-4 h-4" />} label="Nationality" value={profile?.nationality} />
+                                <InfoRow icon={<Calendar className="w-4 h-4" />} label="Joined" value={profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString() : "N/A"} />
+                            </div>
+                        </div>
+
+                        {/* Bio Section */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">About Me</h3>
+                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                                {profile?.bio || "No biography provided yet."}
+                            </p>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === "preferences" && (
+                    <div className="space-y-4">
+                        {/* Languages Card */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 flex items-center justify-center">
+                                    <Languages className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-gray-900 dark:text-white">Languages Spoken</h3>
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {profile?.languages?.length ? (
+                                    profile.languages.map((lang: string, index: number) => (
+                                        <span
+                                            key={index}
+                                            className="px-3 py-1.5 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full text-sm font-medium text-blue-700 dark:text-blue-300"
+                                        >
+                                            {lang}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span className="text-gray-500 dark:text-gray-400 text-sm">No languages specified</span>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Preferences Card */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/40 dark:to-orange-900/40 flex items-center justify-center">
+                                    <Heart className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-gray-900 dark:text-white">Travel Preferences</h3>
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {profile?.preferences?.length ? (
+                                    profile.preferences.map((pref: string, index: number) => (
+                                        <span
+                                            key={index}
+                                            className="px-3 py-1.5 bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 rounded-full text-sm font-medium text-amber-700 dark:text-amber-300"
+                                        >
+                                            {pref}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span className="text-gray-500 dark:text-gray-400 text-sm">No preferences specified</span>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Badges Card */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/40 dark:to-teal-900/40 flex items-center justify-center">
+                                    <Award className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-gray-900 dark:text-white">Traveler Badges</h3>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <div className="flex flex-col items-center">
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-800/40 dark:to-teal-800/40 flex items-center justify-center mb-1">
+                                        <Compass className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                    </div>
+                                    <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">New Explorer</span>
+                                </div>
+                                <div className="flex flex-col items-center opacity-40">
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-800/20 dark:to-orange-800/20 flex items-center justify-center mb-1">
+                                        <Globe className="w-5 h-5 text-amber-400 dark:text-amber-500" />
+                                    </div>
+                                    <span className="text-xs font-medium text-gray-400 dark:text-gray-500">World Traveler</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === "actions" && (
+                    <div className="space-y-3">
+                        <Link href="/dashboard/tourist">
+                            <button className="w-full p-3 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 text-gray-800 dark:text-gray-300 font-medium flex items-center justify-between">
+                                <span>Go to Dashboard</span>
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+                        </Link>
+                        <Link href="/tours">
+                            <button className="w-full p-3 rounded-xl bg-gradient-to-r from-blue-100 to-sky-100 dark:from-blue-900/20 dark:to-sky-900/20 text-blue-700 dark:text-blue-300 font-medium flex items-center justify-between">
+                                <span>Explore Tours</span>
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+                        </Link>
+                        <Link href="/dashboard/tourist/bookings">
+                            <button className="w-full p-3 rounded-xl bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/20 dark:to-orange-900/20 text-amber-700 dark:text-amber-300 font-medium flex items-center justify-between">
+                                <span>My Bookings</span>
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+                        </Link>
+                    </div>
+                )}
+
+                {/* Status Footer */}
+                <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                            Member since {profile?.createdAt ? new Date(profile.createdAt).getFullYear() : "N/A"}
+                        </div>
+                        <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
+                            <Compass className="w-3 h-3" />
+                            Explorer
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Desktop Tourist Profile Component
+const DesktopTouristProfile = ({ userData }: TouristProfileProps) => {
     const { profile } = userData;
 
     return (
-        <section className="max-w-6xl mx-auto p-4">
+        <div className="hidden md:block">
             <div className="bg-gradient-to-br from-white via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950/10 dark:to-teal-950/10 rounded-3xl shadow-2xl shadow-emerald-200/50 dark:shadow-emerald-950/50 overflow-hidden border border-emerald-100 dark:border-emerald-800/30">
                 {/* Header */}
                 <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-6 relative overflow-hidden">
@@ -27,12 +307,12 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
                         </div>
 
                         <div className="flex items-center gap-4">
-                            <div>
+                            <Link href={'/my-profile/update'}>
                                 <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white text-sm font-medium backdrop-blur-sm transition-all hover:scale-105 active:scale-95 border border-white/30">
                                     <Edit className="w-4 h-4" />
                                     Edit Profile
                                 </button>
-                            </div>
+                            </Link>
 
                             <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/25 to-white/10 backdrop-blur-sm flex items-center justify-center border-2 border-white/30 shadow-lg">
                                 <UserCircle className="w-7 h-7 text-white" />
@@ -298,18 +578,16 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
                     </div>
                 </div>
             </div>
+        </div>
+    );
+};
+
+// Main Tourist Profile Component
+export default function TouristProfile({ userData }: TouristProfileProps) {
+    return (
+        <section className="max-w-6xl mx-auto p-4">
+            <MobileTouristProfile userData={userData} />
+            <DesktopTouristProfile userData={userData} />
         </section>
     );
 }
-
-const InfoCard = ({ icon, label, value, gradient, iconColor }: any) => (
-    <div className={`p-4 rounded-xl bg-gradient-to-br ${gradient} border border-gray-100 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-gray-900/30 transition-all duration-300 hover:-translate-y-1`}>
-        <div className="flex items-center gap-3 mb-2">
-            <div className={`p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm ${iconColor}`}>
-                {icon}
-            </div>
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{label}</span>
-        </div>
-        <p className="text-lg font-semibold text-gray-900 dark:text-white truncate">{value}</p>
-    </div>
-);
