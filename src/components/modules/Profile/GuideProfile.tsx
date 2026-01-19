@@ -29,7 +29,7 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
             {/* Verification Alert Banner */}
             {showVerificationAlert && !profile?.isVerified && (
                 <div className="mb-6 animate-fade-in">
-                    <div className="bg-linear-to-r from-amber-500/10 via-orange-500/10 to-red-500/10 border-l-4 border-amber-500 rounded-r-xl p-5 shadow-lg">
+                    <div className="bg-linear-to-r from-amber-500/10 via-orange-500/10 to-red-500/10 dark:from-amber-900/20 dark:via-orange-900/20 dark:to-red-900/20 border-l-4 border-amber-500 dark:border-amber-600 rounded-r-xl p-5 shadow-lg">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="flex items-start gap-4">
                                 <div className="flex-shrink-0">
@@ -85,7 +85,7 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
             )}
 
             {/* Main Profile Card */}
-            <div className="bg-linear-to-br from-white via-amber-50 to-orange-50 dark:from-gray-900 dark:via-amber-950/10 dark:to-orange-950/10 rounded-3xl shadow-2xl overflow-hidden border border-amber-100 dark:border-amber-800/30">
+            <div className="bg-linear-to-br from-white via-amber-50 to-orange-50 dark:from-gray-900 dark:via-amber-950/10 dark:to-orange-950/10 rounded-3xl shadow-2xl shadow-amber-200/50 dark:shadow-amber-950/50 overflow-hidden border border-amber-100 dark:border-amber-800/30">
                 {/* Header */}
                 <div className="bg-linear-to-r from-amber-500 via-orange-500 to-red-500 p-6 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full -translate-y-36 translate-x-36"></div>
@@ -111,7 +111,7 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
                                 </div>
                                 {profile?.isVerified ? (
                                     <div className="absolute -top-2 -right-2 group-hover:scale-110 transition-transform">
-                                        <div className="bg-linear-to-r from-emerald-500 to-teal-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg border border-emerald-300">
+                                        <div className="bg-linear-to-r from-emerald-500 to-teal-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg border border-emerald-300 dark:border-emerald-500">
                                             <CheckCircle className="w-3 h-3" />
                                             Verified
                                         </div>
@@ -120,7 +120,7 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
                                     <div className="absolute -top-2 -right-2 group-hover:scale-110 transition-transform">
                                         <div
                                             onClick={handleVerifyClick}
-                                            className="bg-linear-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg border border-amber-300 cursor-pointer hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                                            className="bg-linear-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg border border-amber-300 dark:border-amber-500 cursor-pointer hover:shadow-xl hover:-translate-y-0.5 transition-all"
                                         >
                                             <Shield className="w-3 h-3" />
                                             Get Verified
@@ -171,7 +171,7 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
                             {/* Stats Cards */}
                             <div className="space-y-4">
                                 {/* Rating Card */}
-                                <div className="bg-linear-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-5 border border-amber-200 dark:border-amber-800 shadow-lg">
+                                <div className="bg-linear-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-5 border border-amber-200 dark:border-amber-800 shadow-lg dark:shadow-gray-950/30">
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center gap-2">
                                             <Star className="w-5 h-5 text-amber-500 fill-current" />
@@ -209,7 +209,7 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
                                                 </p>
                                             </div>
                                         </div>
-                                        <TrendingUp className="w-5 h-5 text-emerald-500" />
+                                        <TrendingUp className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
                                     </div>
                                 </div>
 
@@ -237,35 +237,35 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
                                     icon={<User className="w-5 h-5" />}
                                     label="Full Name"
                                     value={profile?.name || "Not provided"}
-                                    linear="from-blue-50 to-sky-50"
+                                    linear="from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/20"
                                     iconColor="text-blue-600 dark:text-blue-400"
                                 />
                                 <InfoCard
                                     icon={<Mail className="w-5 h-5" />}
                                     label="Email Address"
                                     value={userData.email}
-                                    linear="from-purple-50 to-violet-50"
+                                    linear="from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20"
                                     iconColor="text-purple-600 dark:text-purple-400"
                                 />
                                 <InfoCard
                                     icon={<MapPin className="w-5 h-5" />}
                                     label="Location"
                                     value={profile?.address || "Not provided"}
-                                    linear="from-emerald-50 to-teal-50"
+                                    linear="from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20"
                                     iconColor="text-emerald-600 dark:text-emerald-400"
                                 />
                                 <InfoCard
                                     icon={<Phone className="w-5 h-5" />}
                                     label="Contact Number"
                                     value={profile?.contactNumber || "Not provided"}
-                                    linear="from-amber-50 to-orange-50"
+                                    linear="from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20"
                                     iconColor="text-amber-600 dark:text-amber-400"
                                 />
                                 <InfoCard
                                     icon={<User className="w-5 h-5" />}
                                     label="Gender"
                                     value={profile?.gender || "Not specified"}
-                                    linear="from-pink-50 to-rose-50"
+                                    linear="from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20"
                                     iconColor="text-pink-600 dark:text-pink-400"
                                 />
                                 <InfoCard
@@ -276,7 +276,7 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
                                         month: 'long',
                                         day: 'numeric'
                                     }) : "N/A"}
-                                    linear="from-gray-50 to-slate-50"
+                                    linear="from-gray-50 to-slate-50 dark:from-gray-800 dark:to-slate-900"
                                     iconColor="text-gray-600 dark:text-gray-400"
                                 />
                             </div>
@@ -405,7 +405,7 @@ export default function GuideProfile({ userData }: GuideProfileProps) {
 }
 
 const InfoCard = ({ icon, label, value, linear, iconColor }: any) => (
-    <div className={`p-4 rounded-xl bg-linear-to-br ${linear} border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
+    <div className={`p-4 rounded-xl bg-linear-to-br ${linear} border border-gray-100 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-gray-900/30 transition-all duration-300 hover:-translate-y-1`}>
         <div className="flex items-center gap-3 mb-2">
             <div className={`p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm ${iconColor}`}>
                 {icon}

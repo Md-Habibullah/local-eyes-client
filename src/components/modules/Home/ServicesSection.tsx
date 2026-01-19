@@ -8,67 +8,126 @@ import {
     ShieldCheck,
     CreditCard,
     Sparkles,
+    Globe,
+    Award,
+    Clock,
+    CheckCircle
 } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 type Service = {
     icon: React.ElementType;
     title: string;
     description: string;
+    features: string[];
+    gradient: string;
+    delay: number;
 };
 
 const services: Service[] = [
     {
         icon: Map,
         title: "Curated Local Tours",
-        description:
-            "Handpicked experiences designed by trusted local guides",
+        description: "Handpicked experiences designed by trusted local guides",
+        features: ["Local expertise", "Hidden gems", "Cultural immersion"],
+        gradient: "from-blue-500 to-cyan-500",
+        delay: 0.1
     },
     {
         icon: Users,
         title: "Expert Tour Guides",
-        description:
-            "Connect with experienced and verified guides who know the area best",
+        description: "Connect with experienced and verified guides who know the area best",
+        features: ["Verified professionals", "Local knowledge", "Multilingual"],
+        gradient: "from-blue-500 to-indigo-500",
+        delay: 0.2
     },
     {
         icon: CreditCard,
         title: "Secure Online Booking",
-        description:
-            "Fast, safe, and transparent booking with trusted payment methods",
+        description: "Fast, safe, and transparent booking with trusted payment methods",
+        features: ["SSL secure", "Multiple payments", "Instant confirmation"],
+        gradient: "from-blue-600 to-purple-600",
+        delay: 0.3
     },
     {
         icon: ShieldCheck,
         title: "Verified & Trusted",
-        description:
-            "All tours and guides are carefully verified for quality and safety",
+        description: "All tours and guides are carefully verified for quality and safety",
+        features: ["Background checks", "Quality assurance", "Safety first"],
+        gradient: "from-blue-500 to-violet-500",
+        delay: 0.4
     },
     {
         icon: Headphones,
         title: "24/7 Customer Support",
-        description:
-            "Our support team is always ready to help you anytime, anywhere",
+        description: "Our support team is always ready to help you anytime, anywhere",
+        features: ["24/7 availability", "Multilingual support", "Quick response"],
+        gradient: "from-cyan-500 to-blue-500",
+        delay: 0.5
     },
     {
         icon: Sparkles,
         title: "Personalized Experiences",
-        description:
-            "Tours tailored to your interests, pace, and travel style",
+        description: "Tours tailored to your interests, pace, and travel style",
+        features: ["Custom itineraries", "Flexible scheduling", "Personal guide"],
+        gradient: "from-blue-400 to-purple-500",
+        delay: 0.6
     },
 ];
 
 export default function ServicesSection() {
+    const { theme } = useTheme();
+    const [isMounted, setIsMounted] = useState(false);
+
+    // Handle mounting safely
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsMounted(true);
+        return () => setIsMounted(false);
+    }, []);
+
+    const isDark = isMounted && theme === "dark";
+
     return (
-        <section className="py-20 bg-gradient-to-b from-transparent to-black/10">
-            <div className="container mx-auto px-6">
+        <section className={`py-20 transition-colors duration-300 ${isDark
+            ? 'bg-gradient-to-b from-gray-900 to-gray-950'
+            : 'bg-gradient-to-b from-white to-gray-50'
+            }`}>
+            <div className="container mx-auto px-4 sm:px-6">
                 {/* Header */}
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-                        Our{" "}
-                        <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                            Services
+                    <div className="inline-flex items-center gap-3 mb-6">
+                        <div className="w-8 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+                        <span className="text-sm font-semibold uppercase tracking-wider bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            Our Services
+                        </span>
+                        <div className="w-8 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+                    </div>
+
+                    <h2 className={`text-4xl md:text-5xl font-black mb-6 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
+                        }`}>
+                        Premium{" "}
+                        <span className="relative">
+                            <span className="relative z-10 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 bg-clip-text text-transparent">
+                                Services
+                            </span>
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: "100%" }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1, delay: 0.3 }}
+                                className={`absolute -bottom-2 left-0 h-1.5 rounded-full transition-colors duration-300 ${isDark
+                                    ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
+                                    : 'bg-gradient-to-r from-blue-100 to-purple-100'
+                                    }`}
+                            />
                         </span>
                     </h2>
-                    <p className="text-white/70 max-w-2xl mx-auto">
-                        Everything you need for a smooth, safe, and unforgettable journey
+
+                    <p className={`max-w-2xl mx-auto text-lg leading-relaxed transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
+                        Everything you need for a seamless, safe, and unforgettable travel experience
                     </p>
                 </div>
 
@@ -82,33 +141,197 @@ export default function ServicesSection() {
                                 key={service.title}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                whileHover={{ y: -10 }}
-                                className="group relative rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl p-8 hover:border-white/30 transition"
+                                viewport={{ once: true, margin: "-50px" }}
+                                transition={{
+                                    delay: index * 0.1,
+                                    type: "spring",
+                                    stiffness: 100,
+                                    damping: 15
+                                }}
+                                whileHover={{
+                                    y: -10,
+                                    transition: { type: "spring", stiffness: 400, damping: 25 }
+                                }}
+                                className="relative group"
                             >
-                                {/* Glow */}
-                                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-cyan-400/20 to-purple-500/20 opacity-0 group-hover:opacity-100 blur-xl transition" />
+                                {/* Main Card */}
+                                <div className={`relative rounded-2xl border p-8 transition-all duration-500 overflow-hidden h-full ${isDark
+                                    ? 'border-gray-800 bg-gray-800 hover:border-blue-700'
+                                    : 'border-gray-200 bg-white hover:border-blue-300'
+                                    } hover:shadow-2xl`}>
+                                    {/* Gradient accent */}
+                                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.gradient}`} />
 
-                                <div className="relative z-10">
-                                    {/* Icon */}
-                                    <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 text-cyan-300">
-                                        <Icon size={28} />
+                                    {/* Hover overlay */}
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-5 transition-all duration-500`} />
+
+                                    {/* Pattern dots */}
+                                    <div className="absolute top-4 right-4 opacity-5">
+                                        <div className="grid grid-cols-3 gap-1">
+                                            {[...Array(9)].map((_, i) => (
+                                                <div key={i} className="w-1 h-1 rounded-full bg-current"></div>
+                                            ))}
+                                        </div>
                                     </div>
 
-                                    {/* Text */}
-                                    <h3 className="text-white font-semibold mb-2">
-                                        {service.title}
-                                    </h3>
+                                    {/* Icon Container */}
+                                    <div className="relative mb-6">
+                                        <div className={`relative w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${isDark
+                                            ? 'bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 group-hover:border-blue-700'
+                                            : 'bg-gradient-to-br from-gray-50 to-white border-gray-200 group-hover:border-blue-200'
+                                            } border`}>
+                                            {/* Icon background */}
+                                            <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${service.gradient} opacity-0 group-hover:opacity-10 transition-all duration-500`} />
 
-                                    <p className="text-sm text-white/70 leading-relaxed">
-                                        {service.description}
-                                    </p>
+                                            {/* Icon */}
+                                            <Icon
+                                                size={30}
+                                                className={`relative z-10 transition-all duration-300 ${isDark
+                                                    ? 'text-gray-300 group-hover:text-transparent'
+                                                    : 'text-gray-700 group-hover:text-transparent'
+                                                    } group-hover:bg-clip-text group-hover:bg-gradient-to-r ${service.gradient}`}
+                                            />
+                                        </div>
+
+                                        {/* Number badge */}
+                                        <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white shadow-lg">
+                                            {index + 1}
+                                        </div>
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="relative space-y-4">
+                                        <h3 className={`font-bold text-xl transition-all duration-300 ${isDark
+                                            ? 'text-gray-100 group-hover:text-transparent'
+                                            : 'text-gray-900 group-hover:text-transparent'
+                                            } group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600`}>
+                                            {service.title}
+                                        </h3>
+
+                                        <p className={`text-sm leading-relaxed transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
+                                            }`}>
+                                            {service.description}
+                                        </p>
+
+                                        {/* Features list */}
+                                        <div className={`pt-4 border-t transition-colors duration-300 ${isDark ? 'border-gray-700' : 'border-gray-100'
+                                            }`}>
+                                            <ul className="space-y-2">
+                                                {service.features.map((feature, idx) => (
+                                                    <li key={idx} className="flex items-center gap-2 text-sm">
+                                                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                                        <span className={`transition-colors duration-300 ${isDark ? 'text-gray-300' : 'text-gray-700'
+                                                            }`}>
+                                                            {feature}
+                                                        </span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    {/* Learn More Button */}
+                                    <div className="mt-8">
+                                        <button className={`w-full py-3 rounded-lg border font-medium transition-all duration-300 ${isDark
+                                            ? 'border-gray-700 text-gray-300 hover:border-blue-600 hover:text-blue-400 hover:bg-blue-900/20'
+                                            : 'border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50'
+                                            } group-hover:bg-gradient-to-r group-hover:from-blue-50 group-hover:to-purple-50 dark:group-hover:from-blue-900/10 dark:group-hover:to-purple-900/10`}>
+                                            Learn More
+                                        </button>
+                                    </div>
                                 </div>
                             </motion.div>
                         );
                     })}
                 </div>
+
+                {/* Additional Services */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-16"
+                >
+                    <div className={`rounded-2xl border p-8 transition-colors duration-300 ${isDark
+                        ? 'bg-gradient-to-r from-blue-900/20 to-purple-900/20 border-blue-800'
+                        : 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-100'
+                        }`}>
+                        <div className="grid md:grid-cols-3 gap-8">
+                            <div className="text-center">
+                                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white mb-4">
+                                    <Clock className="w-6 h-6" />
+                                </div>
+                                <h4 className={`font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
+                                    }`}>
+                                    Flexible Scheduling
+                                </h4>
+                                <p className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
+                                    }`}>
+                                    Choose dates that work for you
+                                </p>
+                            </div>
+                            <div className="text-center">
+                                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white mb-4">
+                                    <Globe className="w-6 h-6" />
+                                </div>
+                                <h4 className={`font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
+                                    }`}>
+                                    Global Coverage
+                                </h4>
+                                <p className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
+                                    }`}>
+                                    Tours available worldwide
+                                </p>
+                            </div>
+                            <div className="text-center">
+                                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 text-white mb-4">
+                                    <Award className="w-6 h-6" />
+                                </div>
+                                <h4 className={`font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
+                                    }`}>
+                                    Award Winning
+                                </h4>
+                                <p className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
+                                    }`}>
+                                    Recognized excellence
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* CTA Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-20 text-center"
+                >
+                    <div className={`rounded-2xl border p-8 max-w-2xl mx-auto shadow-lg transition-colors duration-300 ${isDark
+                        ? 'bg-gray-800 border-gray-700'
+                        : 'bg-white border-gray-200'
+                        }`}>
+                        <h3 className={`text-2xl font-bold mb-4 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
+                            }`}>
+                            Ready to Start Your Journey?
+                        </h3>
+                        <p className={`mb-6 transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
+                            Join thousands of satisfied travelers who have experienced the world with us
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105">
+                                Explore All Tours
+                            </button>
+                            <button className={`px-8 py-3 rounded-full border-2 font-semibold transition-all duration-300 ${isDark
+                                ? 'border-blue-500 text-blue-400 hover:bg-blue-900/20'
+                                : 'border-blue-600 text-blue-600 hover:bg-blue-50'
+                                }`}>
+                                Contact Our Team
+                            </button>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );

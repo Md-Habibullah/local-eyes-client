@@ -14,7 +14,7 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
 
     return (
         <section className="max-w-6xl mx-auto p-4">
-            <div className="bg-gradient-to-br from-white via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950/10 dark:to-teal-950/10 rounded-3xl shadow-2xl overflow-hidden border border-emerald-100 dark:border-emerald-800/30">
+            <div className="bg-gradient-to-br from-white via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950/10 dark:to-teal-950/10 rounded-3xl shadow-2xl shadow-emerald-200/50 dark:shadow-emerald-950/50 overflow-hidden border border-emerald-100 dark:border-emerald-800/30">
                 {/* Header */}
                 <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-6 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full -translate-y-36 translate-x-36"></div>
@@ -76,10 +76,10 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
                             {/* Travel Stats Cards */}
                             <div className="space-y-4">
                                 {/* Bookings Card */}
-                                <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-5 border border-emerald-200 dark:border-emerald-800 shadow-lg">
+                                <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-5 border border-emerald-200 dark:border-emerald-800 shadow-lg dark:shadow-gray-950/30">
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center gap-2">
-                                            <Package className="w-5 h-5 text-emerald-500" />
+                                            <Package className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
                                             <span className="font-semibold text-gray-800 dark:text-gray-200">Total Bookings</span>
                                         </div>
                                         <span className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -95,7 +95,7 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
                                 <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-5 border border-amber-200 dark:border-amber-800 shadow-lg">
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center gap-2">
-                                            <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                                            <Star className="w-5 h-5 text-amber-500 dark:text-amber-400 fill-amber-500" />
                                             <span className="font-semibold text-gray-800 dark:text-gray-200">Average Rating</span>
                                         </div>
                                         <span className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -131,35 +131,35 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
                                     icon={<User className="w-5 h-5" />}
                                     label="Full Name"
                                     value={profile?.name || "Not provided"}
-                                    gradient="from-blue-50 to-sky-50"
+                                    gradient="from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/20"
                                     iconColor="text-blue-600 dark:text-blue-400"
                                 />
                                 <InfoCard
                                     icon={<Mail className="w-5 h-5" />}
                                     label="Email Address"
                                     value={userData.email}
-                                    gradient="from-purple-50 to-violet-50"
+                                    gradient="from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20"
                                     iconColor="text-purple-600 dark:text-purple-400"
                                 />
                                 <InfoCard
                                     icon={<MapPin className="w-5 h-5" />}
                                     label="Location"
                                     value={profile?.address || "Not provided"}
-                                    gradient="from-emerald-50 to-teal-50"
+                                    gradient="from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20"
                                     iconColor="text-emerald-600 dark:text-emerald-400"
                                 />
                                 <InfoCard
                                     icon={<User className="w-5 h-5" />}
                                     label="Gender"
                                     value={profile?.gender || "Not specified"}
-                                    gradient="from-pink-50 to-rose-50"
+                                    gradient="from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20"
                                     iconColor="text-pink-600 dark:text-pink-400"
                                 />
                                 <InfoCard
                                     icon={<Globe className="w-5 h-5" />}
                                     label="Nationality"
                                     value={profile?.nationality || "Not specified"}
-                                    gradient="from-indigo-50 to-blue-50"
+                                    gradient="from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20"
                                     iconColor="text-indigo-600 dark:text-indigo-400"
                                 />
                                 <InfoCard
@@ -170,7 +170,7 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
                                         month: 'long',
                                         day: 'numeric'
                                     }) : "N/A"}
-                                    gradient="from-gray-50 to-slate-50"
+                                    gradient="from-gray-50 to-slate-50 dark:from-gray-800 dark:to-slate-900"
                                     iconColor="text-gray-600 dark:text-gray-400"
                                 />
                             </div>
@@ -252,19 +252,19 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
                                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-800/20 dark:to-orange-800/20 flex items-center justify-center mb-2">
                                             <Globe className="w-6 h-6 text-amber-400 dark:text-amber-500" />
                                         </div>
-                                        <span className="text-xs font-medium text-gray-400">World Traveler</span>
+                                        <span className="text-xs font-medium text-gray-400 dark:text-gray-500">World Traveler</span>
                                     </div>
                                     <div className="flex flex-col items-center opacity-40">
                                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-800/20 dark:to-violet-800/20 flex items-center justify-center mb-2">
                                             <Star className="w-6 h-6 text-purple-400 dark:text-purple-500" />
                                         </div>
-                                        <span className="text-xs font-medium text-gray-400">Top Reviewer</span>
+                                        <span className="text-xs font-medium text-gray-400 dark:text-gray-500">Top Reviewer</span>
                                     </div>
                                     <div className="flex flex-col items-center opacity-40">
                                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-sky-100 dark:from-blue-800/20 dark:to-sky-800/20 flex items-center justify-center mb-2">
                                             <Heart className="w-6 h-6 text-blue-400 dark:text-blue-500" />
                                         </div>
-                                        <span className="text-xs font-medium text-gray-400">Loyal Traveler</span>
+                                        <span className="text-xs font-medium text-gray-400 dark:text-gray-500">Loyal Traveler</span>
                                     </div>
                                 </div>
                             </div>
@@ -303,7 +303,7 @@ export default function TouristProfile({ userData }: TouristProfileProps) {
 }
 
 const InfoCard = ({ icon, label, value, gradient, iconColor }: any) => (
-    <div className={`p-4 rounded-xl bg-gradient-to-br ${gradient} border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
+    <div className={`p-4 rounded-xl bg-gradient-to-br ${gradient} border border-gray-100 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-gray-900/30 transition-all duration-300 hover:-translate-y-1`}>
         <div className="flex items-center gap-3 mb-2">
             <div className={`p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm ${iconColor}`}>
                 {icon}

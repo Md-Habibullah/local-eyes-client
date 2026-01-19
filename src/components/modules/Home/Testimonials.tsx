@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 interface Testimonial {
     id: string;
@@ -26,6 +27,15 @@ interface TestimonialsProps {
 export default function Testimonials({ initialTestimonials }: TestimonialsProps) {
     const [testimonials] = useState<Testimonial[]>(initialTestimonials || []);
     const [activeIndex, setActiveIndex] = useState(0);
+    const { theme } = useTheme();
+    const [isMounted, setIsMounted] = useState(false);
+
+    // Handle mounting safely
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsMounted(true);
+        return () => setIsMounted(false);
+    }, []);
 
     useEffect(() => {
         if (testimonials && testimonials.length > 1) {
@@ -36,15 +46,24 @@ export default function Testimonials({ initialTestimonials }: TestimonialsProps)
         }
     }, [testimonials]);
 
+    const isDark = isMounted && theme === "dark";
+
     // Handle empty testimonials array
     if (!testimonials || testimonials.length === 0) {
         return (
             <div className="text-center py-12">
-                <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <div className={`h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-primary/20' : 'bg-primary/10'
+                    }`}>
                     <span className="text-2xl">🌟</span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No Reviews Yet</h3>
-                <p className="text-muted-foreground">Be the first to share your experience!</p>
+                <h3 className={`text-lg font-semibold mb-2 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
+                    }`}>
+                    No Reviews Yet
+                </h3>
+                <p className={`transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-muted-foreground'
+                    }`}>
+                    Be the first to share your experience!
+                </p>
             </div>
         );
     }
@@ -52,7 +71,8 @@ export default function Testimonials({ initialTestimonials }: TestimonialsProps)
     return (
         <div className="relative">
             {/* Quote Icon */}
-            <div className="absolute -top-8 -left-8 text-primary/10">
+            <div className={`absolute -top-8 -left-8 transition-colors duration-300 ${isDark ? 'text-primary/20' : 'text-primary/10'
+                }`}>
                 <Quote className="h-32 w-32" />
             </div>
 
@@ -65,7 +85,10 @@ export default function Testimonials({ initialTestimonials }: TestimonialsProps)
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <Card className="border-border/50 bg-linear-to-br from-white to-primary/5">
+                        <Card className={`transition-colors duration-300 ${isDark
+                            ? 'border-gray-800 bg-gradient-to-br from-gray-900 to-primary/10'
+                            : 'border-border/50 bg-gradient-to-br from-white to-primary/5'
+                            }`}>
                             <CardContent className="p-8 md:p-12">
                                 {/* Rating */}
                                 <div className="flex gap-1 mb-6">
@@ -73,17 +96,20 @@ export default function Testimonials({ initialTestimonials }: TestimonialsProps)
                                         <Star
                                             key={i}
                                             className={cn(
-                                                "h-5 w-5",
+                                                "h-5 w-5 transition-colors duration-300",
                                                 i < (testimonials[activeIndex]?.rating || 5)
                                                     ? "fill-yellow-400 text-yellow-400"
-                                                    : "fill-gray-200 text-gray-200"
+                                                    : isDark
+                                                        ? "fill-gray-700 text-gray-700"
+                                                        : "fill-gray-200 text-gray-200"
                                             )}
                                         />
                                     ))}
                                 </div>
 
                                 {/* Quote */}
-                                <blockquote className="text-2xl md:text-3xl font-medium italic mb-8">
+                                <blockquote className={`text-2xl md:text-3xl font-medium italic mb-8 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
+                                    }`}>
                                     {testimonials[activeIndex]?.comment || "Amazing experience!"}
                                 </blockquote>
 
@@ -91,15 +117,22 @@ export default function Testimonials({ initialTestimonials }: TestimonialsProps)
                                 <div className="flex items-center gap-4">
                                     <Avatar className="h-14 w-14 border-2 border-primary/20">
                                         <AvatarImage src={testimonials[activeIndex]?.avatar} />
-                                        <AvatarFallback className="bg-primary/10 text-primary text-lg">
+                                        <AvatarFallback className={cn(
+                                            "text-lg transition-colors duration-300",
+                                            isDark
+                                                ? 'bg-primary/20 text-primary'
+                                                : 'bg-primary/10 text-primary'
+                                        )}>
                                             {testimonials[activeIndex]?.name?.charAt(0) || "T"}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <div className="font-bold text-lg">
+                                        <div className={`font-bold text-lg transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
+                                            }`}>
                                             {testimonials[activeIndex]?.name || "Traveler"}
                                         </div>
-                                        <div className="text-muted-foreground">
+                                        <div className={`transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-muted-foreground'
+                                            }`}>
                                             {testimonials[activeIndex]?.role || "Traveler"} • {testimonials[activeIndex]?.location || "Various Locations"}
                                         </div>
                                     </div>
@@ -120,8 +153,12 @@ export default function Testimonials({ initialTestimonials }: TestimonialsProps)
                                     className={cn(
                                         "h-2 w-2 rounded-full transition-all duration-300",
                                         index === activeIndex
-                                            ? "bg-primary w-8"
-                                            : "bg-gray-300 hover:bg-gray-400"
+                                            ? isDark
+                                                ? "bg-primary w-8"
+                                                : "bg-primary w-8"
+                                            : isDark
+                                                ? "bg-gray-700 hover:bg-gray-600"
+                                                : "bg-gray-300 hover:bg-gray-400"
                                     )}
                                     aria-label={`Go to testimonial ${index + 1}`}
                                 />
@@ -131,23 +168,30 @@ export default function Testimonials({ initialTestimonials }: TestimonialsProps)
                         {/* Navigation Buttons */}
                         <div className="flex justify-between items-center mt-8">
                             <Button
-                                variant="outline"
+                                variant={isDark ? "secondary" : "outline"}
                                 size="icon"
                                 onClick={() => setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
-                                className="rounded-full"
+                                className={`rounded-full transition-colors duration-300 ${isDark
+                                    ? 'border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-200'
+                                    : ''
+                                    }`}
                             >
                                 ←
                             </Button>
 
-                            <div className="text-sm text-muted-foreground">
+                            <div className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-muted-foreground'
+                                }`}>
                                 {activeIndex + 1} of {testimonials.length}
                             </div>
 
                             <Button
-                                variant="outline"
+                                variant={isDark ? "secondary" : "outline"}
                                 size="icon"
                                 onClick={() => setActiveIndex((prev) => (prev + 1) % testimonials.length)}
-                                className="rounded-full"
+                                className={`rounded-full transition-colors duration-300 ${isDark
+                                    ? 'border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-200'
+                                    : ''
+                                    }`}
                             >
                                 →
                             </Button>

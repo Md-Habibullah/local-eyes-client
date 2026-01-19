@@ -30,14 +30,14 @@ const RegisterForm = () => {
     <div className="w-full">
       {/* Success Message */}
       {state?.success && (
-        <div className="mb-6 p-4 bg-linear-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl">
+        <div className="mb-6 p-4 bg-linear-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+              <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
-              <p className="font-semibold text-emerald-800">Account created successfully!</p>
-              <p className="text-sm text-emerald-700">Please check your email to verify your account.</p>
+              <p className="font-semibold text-emerald-800 dark:text-emerald-300">Account created successfully!</p>
+              <p className="text-sm text-emerald-700 dark:text-emerald-400">Please check your email to verify your account.</p>
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@ const RegisterForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Name */}
             <Field>
-              <FieldLabel htmlFor="name" className="flex items-center gap-2">
+              <FieldLabel htmlFor="name" className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <User className="w-4 h-4" />
                 Full Name
               </FieldLabel>
@@ -58,16 +58,16 @@ const RegisterForm = () => {
                   name="name"
                   type="text"
                   placeholder="John Doe"
-                  className="pl-10 h-11 rounded-lg"
+                  className="pl-10 h-11 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400"
                 />
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
               </div>
               <InputFieldError field="name" state={state} />
             </Field>
 
             {/* Address */}
             <Field>
-              <FieldLabel htmlFor="address" className="flex items-center gap-2">
+              <FieldLabel htmlFor="address" className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <MapPin className="w-4 h-4" />
                 Address
               </FieldLabel>
@@ -77,16 +77,16 @@ const RegisterForm = () => {
                   name="address"
                   type="text"
                   placeholder="123 Main St, City"
-                  className="pl-10 h-11 rounded-lg"
+                  className="pl-10 h-11 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400"
                 />
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
               </div>
               <InputFieldError field="address" state={state} />
             </Field>
 
             {/* Email */}
             <Field>
-              <FieldLabel htmlFor="email" className="flex items-center gap-2">
+              <FieldLabel htmlFor="email" className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <Mail className="w-4 h-4" />
                 Email
               </FieldLabel>
@@ -96,16 +96,16 @@ const RegisterForm = () => {
                   name="email"
                   type="email"
                   placeholder="john@example.com"
-                  className="pl-10 h-11 rounded-lg"
+                  className="pl-10 h-11 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400"
                 />
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
               </div>
               <InputFieldError field="email" state={state} />
             </Field>
 
             {/* Role */}
             <Field>
-              <FieldLabel htmlFor="role" className="flex items-center gap-2">
+              <FieldLabel htmlFor="role" className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <Briefcase className="w-4 h-4" />
                 Role
               </FieldLabel>
@@ -113,20 +113,20 @@ const RegisterForm = () => {
                 <select
                   id="role"
                   name="role"
-                  className="w-full border rounded-lg px-10 py-2.5 h-11 appearance-none bg-white"
+                  className="w-full border rounded-lg px-10 py-2.5 h-11 appearance-none bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   defaultValue="TOURIST"
                 >
-                  <option value="TOURIST">Tourist</option>
-                  <option value="GUIDE">Guide</option>
+                  <option value="TOURIST" className="dark:bg-gray-800">Tourist</option>
+                  <option value="GUIDE" className="dark:bg-gray-800">Guide</option>
                 </select>
-                <Briefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Briefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
               </div>
               <InputFieldError field="role" state={state} />
             </Field>
 
             {/* Gender */}
             <Field>
-              <FieldLabel htmlFor="gender" className="flex items-center gap-2">
+              <FieldLabel htmlFor="gender" className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <Users className="w-4 h-4" />
                 Gender
               </FieldLabel>
@@ -134,24 +134,24 @@ const RegisterForm = () => {
                 <select
                   id="gender"
                   name="gender"
-                  className="w-full border rounded-lg px-10 py-2.5 h-11 appearance-none bg-white"
+                  className="w-full border rounded-lg px-10 py-2.5 h-11 appearance-none bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   defaultValue=""
                 >
-                  <option value="" disabled>
+                  <option value="" disabled className="dark:bg-gray-800">
                     Select gender
                   </option>
-                  <option value="MALE">Male</option>
-                  <option value="FEMALE">Female</option>
-                  <option value="OTHER">Other</option>
+                  <option value="MALE" className="dark:bg-gray-800">Male</option>
+                  <option value="FEMALE" className="dark:bg-gray-800">Female</option>
+                  <option value="OTHER" className="dark:bg-gray-800">Other</option>
                 </select>
-                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
               </div>
               <InputFieldError field="gender" state={state} />
             </Field>
 
             {/* Password */}
             <Field>
-              <FieldLabel htmlFor="password" className="flex items-center gap-2">
+              <FieldLabel htmlFor="password" className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <Key className="w-4 h-4" />
                 Password
               </FieldLabel>
@@ -161,13 +161,13 @@ const RegisterForm = () => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
-                  className="pl-10 pr-10 h-11 rounded-lg"
+                  className="pl-10 pr-10 h-11 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400"
                 />
-                <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -177,7 +177,7 @@ const RegisterForm = () => {
 
             {/* Confirm Password */}
             <Field className="md:col-span-2">
-              <FieldLabel htmlFor="confirmPassword" className="flex items-center gap-2">
+              <FieldLabel htmlFor="confirmPassword" className="flex items-center gap-2 text-gray-900 dark:text-white">
                 <Lock className="w-4 h-4" />
                 Confirm Password
               </FieldLabel>
@@ -187,13 +187,13 @@ const RegisterForm = () => {
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
-                  className="pl-10 pr-10 h-11 rounded-lg"
+                  className="pl-10 pr-10 h-11 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-400"
                 />
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
                 >
                   {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -203,12 +203,12 @@ const RegisterForm = () => {
           </div>
 
           {/* Security Tips */}
-          <div className="mt-6 p-4 bg-linear-to-r from-blue-50 to-sky-50 rounded-xl border border-blue-100">
+          <div className="mt-6 p-4 bg-linear-to-r from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30">
             <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+              <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-blue-800 mb-1">Password Security Tips</p>
-                <ul className="text-xs text-blue-700 space-y-1">
+                <p className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-1">Password Security Tips</p>
+                <ul className="text-xs text-blue-700 dark:text-blue-400 space-y-1">
                   <li>• Use at least 8 characters with mixed case letters</li>
                   <li>• Include numbers and special characters for strength</li>
                   <li>• Avoid using personal information</li>
@@ -222,7 +222,7 @@ const RegisterForm = () => {
               <Button
                 type="submit"
                 disabled={isPending || state?.success}
-                className="w-full h-12 rounded-xl bg-linear-to-r from-blue-600 to-sky-600 hover:from-blue-700 hover:to-sky-700 text-white font-semibold"
+                className="w-full h-12 rounded-xl bg-linear-to-r from-blue-600 to-sky-600 hover:from-blue-700 hover:to-sky-700 dark:from-blue-700 dark:to-sky-700 dark:hover:from-blue-600 dark:hover:to-sky-600 text-white font-semibold"
               >
                 {isPending ? (
                   <span className="flex items-center gap-2">
@@ -241,11 +241,11 @@ const RegisterForm = () => {
               </Button>
 
               <FieldDescription className="text-center mt-4">
-                <span className="text-gray-600">
+                <span className="text-gray-600 dark:text-gray-400">
                   Already have an account?{" "}
                   <Link
                     href="/login"
-                    className="font-semibold text-blue-600 hover:text-blue-800 transition-colors"
+                    className="font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
                   >
                     Sign in
                   </Link>

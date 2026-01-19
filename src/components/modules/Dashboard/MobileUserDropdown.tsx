@@ -193,27 +193,12 @@ const MobileUserDropdown = ({ userInfo, userData }: MobileUserDropdownProps) => 
                         </Link>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem asChild className="p-3 rounded-lg cursor-pointer">
-                        <Link href="/notifications" className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                                <Bell className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                            </div>
-                            <div className="flex-1">
-                                <div className="font-medium">Notifications</div>
-                                <div className="text-xs text-muted-foreground">Manage alerts</div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                                <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                            </div>
-                        </Link>
-                    </DropdownMenuItem>
                 </div>
 
                 <DropdownMenuSeparator />
 
                 {/* Quick Actions */}
-                <div className="p-3">
+                {/* <div className="p-3">
                     <div className="text-xs font-medium text-muted-foreground mb-2">Quick Actions</div>
                     <div className="grid grid-cols-2 gap-2">
                         <Button variant="outline" size="sm" className="h-auto py-2" asChild>
@@ -229,7 +214,7 @@ const MobileUserDropdown = ({ userInfo, userData }: MobileUserDropdownProps) => 
                             </Link>
                         </Button>
                     </div>
-                </div>
+                </div> */}
 
                 <DropdownMenuSeparator />
 
