@@ -221,11 +221,12 @@ export default async function HomePage() {
             >
               Browse All Tours
             </Link>
-            <div
+            <Link
+              href={'/become-a-guide'}
               className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-md border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
             >
               Become a Guide
-            </div>
+            </Link>
           </div>
         </div>
       </section>

@@ -13,8 +13,6 @@ import {
     Clock,
     CheckCircle
 } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
 
 type Service = {
     icon: React.ElementType;
@@ -77,23 +75,8 @@ const services: Service[] = [
 ];
 
 export default function ServicesSection() {
-    const { theme } = useTheme();
-    const [isMounted, setIsMounted] = useState(false);
-
-    // Handle mounting safely
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setIsMounted(true);
-        return () => setIsMounted(false);
-    }, []);
-
-    const isDark = isMounted && theme === "dark";
-
     return (
-        <section className={`py-20 transition-colors duration-300 ${isDark
-            ? 'bg-gradient-to-b from-gray-900 to-gray-950'
-            : 'bg-gradient-to-b from-white to-gray-50'
-            }`}>
+        <section className="py-20 bg-gradient-to-b from-white to-gray-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-950 transition-colors duration-300">
             <div className="container mx-auto px-4 sm:px-6">
                 {/* Header */}
                 <div className="text-center mb-16">
@@ -105,8 +88,7 @@ export default function ServicesSection() {
                         <div className="w-8 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
                     </div>
 
-                    <h2 className={`text-4xl md:text-5xl font-black mb-6 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
-                        }`}>
+                    <h2 className="text-4xl md:text-5xl font-black mb-6 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                         Premium{" "}
                         <span className="relative">
                             <span className="relative z-10 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 bg-clip-text text-transparent">
@@ -117,16 +99,12 @@ export default function ServicesSection() {
                                 whileInView={{ width: "100%" }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 1, delay: 0.3 }}
-                                className={`absolute -bottom-2 left-0 h-1.5 rounded-full transition-colors duration-300 ${isDark
-                                    ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
-                                    : 'bg-gradient-to-r from-blue-100 to-purple-100'
-                                    }`}
+                                className="absolute -bottom-2 left-0 h-1.5 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 dark:bg-gradient-to-r dark:from-blue-900/50 dark:to-purple-900/50 transition-colors duration-300"
                             />
                         </span>
                     </h2>
 
-                    <p className={`max-w-2xl mx-auto text-lg leading-relaxed transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
-                        }`}>
+                    <p className="max-w-2xl mx-auto text-lg leading-relaxed text-gray-600 dark:text-gray-400 transition-colors duration-300">
                         Everything you need for a seamless, safe, and unforgettable travel experience
                     </p>
                 </div>
@@ -155,10 +133,7 @@ export default function ServicesSection() {
                                 className="relative group"
                             >
                                 {/* Main Card */}
-                                <div className={`relative rounded-2xl border p-8 transition-all duration-500 overflow-hidden h-full ${isDark
-                                    ? 'border-gray-800 bg-gray-800 hover:border-blue-700'
-                                    : 'border-gray-200 bg-white hover:border-blue-300'
-                                    } hover:shadow-2xl`}>
+                                <div className="relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-8 transition-all duration-500 overflow-hidden h-full hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-2xl">
                                     {/* Gradient accent */}
                                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.gradient}`} />
 
@@ -176,20 +151,14 @@ export default function ServicesSection() {
 
                                     {/* Icon Container */}
                                     <div className="relative mb-6">
-                                        <div className={`relative w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${isDark
-                                            ? 'bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 group-hover:border-blue-700'
-                                            : 'bg-gradient-to-br from-gray-50 to-white border-gray-200 group-hover:border-blue-200'
-                                            } border`}>
+                                        <div className="relative w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 border border-gray-200 dark:border-gray-700 group-hover:border-blue-200 dark:group-hover:border-blue-700">
                                             {/* Icon background */}
                                             <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${service.gradient} opacity-0 group-hover:opacity-10 transition-all duration-500`} />
 
                                             {/* Icon */}
                                             <Icon
                                                 size={30}
-                                                className={`relative z-10 transition-all duration-300 ${isDark
-                                                    ? 'text-gray-300 group-hover:text-transparent'
-                                                    : 'text-gray-700 group-hover:text-transparent'
-                                                    } group-hover:bg-clip-text group-hover:bg-gradient-to-r ${service.gradient}`}
+                                                className="relative z-10 transition-all duration-300 text-gray-700 dark:text-gray-300 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600"
                                             />
                                         </div>
 
@@ -201,27 +170,21 @@ export default function ServicesSection() {
 
                                     {/* Content */}
                                     <div className="relative space-y-4">
-                                        <h3 className={`font-bold text-xl transition-all duration-300 ${isDark
-                                            ? 'text-gray-100 group-hover:text-transparent'
-                                            : 'text-gray-900 group-hover:text-transparent'
-                                            } group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600`}>
+                                        <h3 className="font-bold text-xl transition-all duration-300 text-gray-900 dark:text-gray-100 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600">
                                             {service.title}
                                         </h3>
 
-                                        <p className={`text-sm leading-relaxed transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
-                                            }`}>
+                                        <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400 transition-colors duration-300">
                                             {service.description}
                                         </p>
 
                                         {/* Features list */}
-                                        <div className={`pt-4 border-t transition-colors duration-300 ${isDark ? 'border-gray-700' : 'border-gray-100'
-                                            }`}>
+                                        <div className="pt-4 border-t border-gray-100 dark:border-gray-700 transition-colors duration-300">
                                             <ul className="space-y-2">
                                                 {service.features.map((feature, idx) => (
                                                     <li key={idx} className="flex items-center gap-2 text-sm">
                                                         <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                                                        <span className={`transition-colors duration-300 ${isDark ? 'text-gray-300' : 'text-gray-700'
-                                                            }`}>
+                                                        <span className="text-gray-700 dark:text-gray-300 transition-colors duration-300">
                                                             {feature}
                                                         </span>
                                                     </li>
@@ -232,10 +195,7 @@ export default function ServicesSection() {
 
                                     {/* Learn More Button */}
                                     <div className="mt-8">
-                                        <button className={`w-full py-3 rounded-lg border font-medium transition-all duration-300 ${isDark
-                                            ? 'border-gray-700 text-gray-300 hover:border-blue-600 hover:text-blue-400 hover:bg-blue-900/20'
-                                            : 'border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50'
-                                            } group-hover:bg-gradient-to-r group-hover:from-blue-50 group-hover:to-purple-50 dark:group-hover:from-blue-900/10 dark:group-hover:to-purple-900/10`}>
+                                        <button className="w-full py-3 rounded-lg border border-gray-300 dark:border-gray-700 font-medium transition-all duration-300 text-gray-700 dark:text-gray-300 hover:border-blue-400 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 group-hover:bg-gradient-to-r group-hover:from-blue-50 group-hover:to-purple-50 dark:group-hover:from-blue-900/10 dark:group-hover:to-purple-900/10">
                                             Learn More
                                         </button>
                                     </div>
@@ -252,21 +212,16 @@ export default function ServicesSection() {
                     viewport={{ once: true }}
                     className="mt-16"
                 >
-                    <div className={`rounded-2xl border p-8 transition-colors duration-300 ${isDark
-                        ? 'bg-gradient-to-r from-blue-900/20 to-purple-900/20 border-blue-800'
-                        : 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-100'
-                        }`}>
+                    <div className="rounded-2xl border border-blue-100 dark:border-blue-800 p-8 bg-gradient-to-r from-blue-50 to-purple-50 dark:bg-gradient-to-r dark:from-blue-900/20 dark:to-purple-900/20 transition-colors duration-300">
                         <div className="grid md:grid-cols-3 gap-8">
                             <div className="text-center">
                                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white mb-4">
                                     <Clock className="w-6 h-6" />
                                 </div>
-                                <h4 className={`font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
-                                    }`}>
+                                <h4 className="font-bold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                                     Flexible Scheduling
                                 </h4>
-                                <p className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
-                                    }`}>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
                                     Choose dates that work for you
                                 </p>
                             </div>
@@ -274,12 +229,10 @@ export default function ServicesSection() {
                                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white mb-4">
                                     <Globe className="w-6 h-6" />
                                 </div>
-                                <h4 className={`font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
-                                    }`}>
+                                <h4 className="font-bold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                                     Global Coverage
                                 </h4>
-                                <p className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
-                                    }`}>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
                                     Tours available worldwide
                                 </p>
                             </div>
@@ -287,12 +240,10 @@ export default function ServicesSection() {
                                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 text-white mb-4">
                                     <Award className="w-6 h-6" />
                                 </div>
-                                <h4 className={`font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
-                                    }`}>
+                                <h4 className="font-bold mb-2 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                                     Award Winning
                                 </h4>
-                                <p className={`text-sm transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
-                                    }`}>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
                                     Recognized excellence
                                 </p>
                             </div>
@@ -307,26 +258,18 @@ export default function ServicesSection() {
                     viewport={{ once: true }}
                     className="mt-20 text-center"
                 >
-                    <div className={`rounded-2xl border p-8 max-w-2xl mx-auto shadow-lg transition-colors duration-300 ${isDark
-                        ? 'bg-gray-800 border-gray-700'
-                        : 'bg-white border-gray-200'
-                        }`}>
-                        <h3 className={`text-2xl font-bold mb-4 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
-                            }`}>
+                    <div className="rounded-2xl border border-gray-200 dark:border-gray-700 p-8 max-w-2xl mx-auto shadow-lg bg-white dark:bg-gray-800 transition-colors duration-300">
+                        <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                             Ready to Start Your Journey?
                         </h3>
-                        <p className={`mb-6 transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
-                            }`}>
+                        <p className="mb-6 text-gray-600 dark:text-gray-400 transition-colors duration-300">
                             Join thousands of satisfied travelers who have experienced the world with us
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105">
                                 Explore All Tours
                             </button>
-                            <button className={`px-8 py-3 rounded-full border-2 font-semibold transition-all duration-300 ${isDark
-                                ? 'border-blue-500 text-blue-400 hover:bg-blue-900/20'
-                                : 'border-blue-600 text-blue-600 hover:bg-blue-50'
-                                }`}>
+                            <button className="px-8 py-3 rounded-full border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 font-semibold transition-all duration-300 hover:bg-blue-50 dark:hover:bg-blue-900/20">
                                 Contact Our Team
                             </button>
                         </div>

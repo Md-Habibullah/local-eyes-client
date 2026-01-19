@@ -3,7 +3,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import clsx from "clsx";
-import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
 type Category = {
@@ -26,11 +25,11 @@ const categories: Category[] = [
         icon: "🍽️",
         gradient: "from-blue-500 to-purple-600",
         bgColor: "bg-gradient-to-br from-blue-50 to-purple-50",
-        darkBgColor: "bg-gradient-to-br from-blue-900/20 to-purple-900/20",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-blue-900/20 dark:to-purple-900/20",
         iconColor: "text-orange-500",
-        darkIconColor: "text-orange-400",
+        darkIconColor: "dark:text-orange-400",
         shadowColor: "shadow-orange-100",
-        darkShadowColor: "shadow-orange-900/20"
+        darkShadowColor: "dark:shadow-orange-900/20"
     },
     {
         id: "ADVENTURE",
@@ -38,11 +37,11 @@ const categories: Category[] = [
         icon: "⛰️",
         gradient: "from-blue-600 to-purple-700",
         bgColor: "bg-gradient-to-br from-blue-50 to-indigo-50",
-        darkBgColor: "bg-gradient-to-br from-blue-900/20 to-indigo-900/20",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-blue-900/20 dark:to-indigo-900/20",
         iconColor: "text-emerald-600",
-        darkIconColor: "text-emerald-400",
+        darkIconColor: "dark:text-emerald-400",
         shadowColor: "shadow-emerald-100",
-        darkShadowColor: "shadow-emerald-900/20"
+        darkShadowColor: "dark:shadow-emerald-900/20"
     },
     {
         id: "CULTURE",
@@ -50,11 +49,11 @@ const categories: Category[] = [
         icon: "🏛️",
         gradient: "from-purple-600 to-blue-600",
         bgColor: "bg-gradient-to-br from-purple-50 to-blue-50",
-        darkBgColor: "bg-gradient-to-br from-purple-900/20 to-blue-900/20",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-purple-900/20 dark:to-blue-900/20",
         iconColor: "text-amber-600",
-        darkIconColor: "text-amber-400",
+        darkIconColor: "dark:text-amber-400",
         shadowColor: "shadow-amber-100",
-        darkShadowColor: "shadow-amber-900/20"
+        darkShadowColor: "dark:shadow-amber-900/20"
     },
     {
         id: "HISTORY",
@@ -62,11 +61,11 @@ const categories: Category[] = [
         icon: "📜",
         gradient: "from-blue-700 to-purple-800",
         bgColor: "bg-gradient-to-br from-blue-100 to-purple-100",
-        darkBgColor: "bg-gradient-to-br from-blue-900/30 to-purple-900/30",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-blue-900/30 dark:to-purple-900/30",
         iconColor: "text-amber-700",
-        darkIconColor: "text-amber-300",
+        darkIconColor: "dark:text-amber-300",
         shadowColor: "shadow-amber-100",
-        darkShadowColor: "shadow-amber-900/20"
+        darkShadowColor: "dark:shadow-amber-900/20"
     },
     {
         id: "NATURE",
@@ -74,11 +73,11 @@ const categories: Category[] = [
         icon: "🌿",
         gradient: "from-emerald-500 to-purple-600",
         bgColor: "bg-gradient-to-br from-emerald-50 to-purple-50",
-        darkBgColor: "bg-gradient-to-br from-emerald-900/20 to-purple-900/20",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-emerald-900/20 dark:to-purple-900/20",
         iconColor: "text-green-600",
-        darkIconColor: "text-green-400",
+        darkIconColor: "dark:text-green-400",
         shadowColor: "shadow-green-100",
-        darkShadowColor: "shadow-green-900/20"
+        darkShadowColor: "dark:shadow-green-900/20"
     },
     {
         id: "NIGHTLIFE",
@@ -86,11 +85,11 @@ const categories: Category[] = [
         icon: "🌙",
         gradient: "from-indigo-600 to-blue-600",
         bgColor: "bg-gradient-to-br from-indigo-50 to-blue-50",
-        darkBgColor: "bg-gradient-to-br from-indigo-900/20 to-blue-900/20",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-indigo-900/20 dark:to-blue-900/20",
         iconColor: "text-sky-600",
-        darkIconColor: "text-sky-400",
+        darkIconColor: "dark:text-sky-400",
         shadowColor: "shadow-sky-100",
-        darkShadowColor: "shadow-sky-900/20"
+        darkShadowColor: "dark:shadow-sky-900/20"
     },
     {
         id: "SHOPPING",
@@ -98,11 +97,11 @@ const categories: Category[] = [
         icon: "🛍️",
         gradient: "from-blue-500 to-pink-600",
         bgColor: "bg-gradient-to-br from-blue-50 to-pink-50",
-        darkBgColor: "bg-gradient-to-br from-blue-900/20 to-pink-900/20",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-blue-900/20 dark:to-pink-900/20",
         iconColor: "text-pink-600",
-        darkIconColor: "text-pink-400",
+        darkIconColor: "dark:text-pink-400",
         shadowColor: "shadow-pink-100",
-        darkShadowColor: "shadow-pink-900/20"
+        darkShadowColor: "dark:shadow-pink-900/20"
     },
     {
         id: "PHOTOGRAPHY",
@@ -110,11 +109,11 @@ const categories: Category[] = [
         icon: "📸",
         gradient: "from-sky-500 to-purple-600",
         bgColor: "bg-gradient-to-br from-sky-50 to-purple-50",
-        darkBgColor: "bg-gradient-to-br from-sky-900/20 to-purple-900/20",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-sky-900/20 dark:to-purple-900/20",
         iconColor: "text-cyan-600",
-        darkIconColor: "text-cyan-400",
+        darkIconColor: "dark:text-cyan-400",
         shadowColor: "shadow-cyan-100",
-        darkShadowColor: "shadow-cyan-900/20"
+        darkShadowColor: "dark:shadow-cyan-900/20"
     },
     {
         id: "SPORTS",
@@ -122,11 +121,11 @@ const categories: Category[] = [
         icon: "⚽",
         gradient: "from-blue-600 to-violet-700",
         bgColor: "bg-gradient-to-br from-blue-50 to-violet-50",
-        darkBgColor: "bg-gradient-to-br from-blue-900/20 to-violet-900/20",
+        darkBgColor: "dark:bg-gradient-to-br dark:from-blue-900/20 dark:to-violet-900/20",
         iconColor: "text-blue-600",
-        darkIconColor: "text-blue-400",
+        darkIconColor: "dark:text-blue-400",
         shadowColor: "shadow-blue-100",
-        darkShadowColor: "shadow-blue-900/20"
+        darkShadowColor: "dark:shadow-blue-900/20"
     },
 ];
 
@@ -134,53 +133,33 @@ export default function CategorySection() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const activeCategory = searchParams.get("category");
-    const { theme } = useTheme();
-    const [isMounted, setIsMounted] = useState(false);
-
-    // Handle mounting safely
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setIsMounted(true);
-        return () => setIsMounted(false);
-    }, []);
 
     const handleClick = (id: string) => {
         router.push(`/tours?category=${id}`);
     };
 
-    const isDark = isMounted && theme === "dark";
-
-    // Render without theme dependencies during SSR
     return (
-        <section className={`py-20 transition-colors duration-300 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
+        <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
             <div className="container mx-auto px-4 sm:px-6">
                 {/* Header */}
                 <div className="mb-16 text-center">
-                    <div className={`inline-block mb-4 px-4 py-1.5 rounded-full border transition-colors duration-300 ${isDark
-                        ? 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-blue-800'
-                        : 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-100'
-                        }`}>
+                    <div className="inline-block mb-4 px-4 py-1.5 rounded-full border bg-gradient-to-r from-blue-50 to-purple-50 dark:bg-gradient-to-r dark:from-blue-900/30 dark:to-purple-900/30 border-blue-100 dark:border-blue-800 transition-colors duration-300">
                         <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                             Explore Experiences
                         </span>
                     </div>
 
-                    <h2 className={`text-4xl md:text-5xl font-black mb-6 transition-colors duration-300 ${isDark ? 'text-gray-100' : 'text-gray-900'
-                        }`}>
+                    <h2 className="text-4xl md:text-5xl font-black mb-6 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                         Browse by{" "}
                         <span className="relative">
                             <span className="relative z-10 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 bg-clip-text text-transparent">
                                 Category
                             </span>
-                            <span className={`absolute -bottom-2 left-0 w-full h-2 rounded-full transition-colors duration-300 ${isDark
-                                ? 'bg-gradient-to-r from-blue-900/50 to-purple-900/50'
-                                : 'bg-gradient-to-r from-blue-100 to-purple-100'
-                                }`}></span>
+                            <span className="absolute -bottom-2 left-0 w-full h-2 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 dark:bg-gradient-to-r dark:from-blue-900/50 dark:to-purple-900/50 transition-colors duration-300"></span>
                         </span>
                     </h2>
 
-                    <p className={`max-w-2xl mx-auto text-lg transition-colors duration-300 ${isDark ? 'text-gray-400' : 'text-gray-600'
-                        }`}>
+                    <p className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400 transition-colors duration-300">
                         Discover experiences tailored to your interests. Each category offers unique adventures
                     </p>
                 </div>
@@ -206,12 +185,12 @@ export default function CategorySection() {
                                     className={clsx(
                                         "relative h-36 rounded-2xl border-2 flex flex-col items-center justify-center gap-4 transition-all duration-300 p-4 overflow-hidden",
                                         isActive
-                                            ? `border-transparent bg-gradient-to-br ${category.gradient} ${isDark ? category.darkShadowColor : category.shadowColor
-                                            } shadow-lg`
+                                            ? `border-transparent bg-gradient-to-br ${category.gradient} ${category.shadowColor} dark:${category.darkShadowColor} shadow-lg`
                                             : clsx(
-                                                isDark
-                                                    ? `border-gray-800 ${category.darkBgColor} hover:border-blue-700 hover:shadow-lg ${category.darkShadowColor}`
-                                                    : `border-gray-200 ${category.bgColor} hover:border-blue-300 hover:shadow-lg ${category.shadowColor}`
+                                                `border-gray-200 dark:border-gray-800 ${category.bgColor} ${category.darkBgColor}`,
+                                                "hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg",
+                                                category.shadowColor,
+                                                category.darkShadowColor
                                             )
                                     )}
                                 >
@@ -229,10 +208,12 @@ export default function CategorySection() {
                                     {/* Icon Container */}
                                     <div className={clsx(
                                         "text-4xl transform transition-all duration-500 relative z-10",
-                                        isActive ? "text-white scale-110" : clsx(
-                                            isDark ? category.darkIconColor : category.iconColor,
-                                            "group-hover:scale-110"
-                                        )
+                                        isActive
+                                            ? "text-white scale-110"
+                                            : clsx(
+                                                `${category.iconColor} ${category.darkIconColor}`,
+                                                "group-hover:scale-110"
+                                            )
                                     )}>
                                         {category.icon}
                                         {isActive && (
@@ -250,7 +231,9 @@ export default function CategorySection() {
                                     <div className="text-center space-y-1 relative z-10">
                                         <span className={clsx(
                                             "font-semibold text-sm transition-colors duration-300",
-                                            isActive ? "text-white" : isDark ? "text-gray-200" : "text-gray-800"
+                                            isActive
+                                                ? "text-white"
+                                                : "text-gray-800 dark:text-gray-200"
                                         )}>
                                             {category.name}
                                         </span>
@@ -272,10 +255,7 @@ export default function CategorySection() {
 
                                     {/* Hover effect */}
                                     {!isActive && (
-                                        <div className={`absolute inset-0 transition-all duration-300 ${isDark
-                                            ? 'bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/10 group-hover:to-white/0'
-                                            : 'bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/20 group-hover:to-white/0'
-                                            }`}></div>
+                                        <div className="absolute inset-0 transition-all duration-300 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/20 group-hover:to-white/0 dark:group-hover:from-white/10 dark:group-hover:to-white/0"></div>
                                     )}
                                 </div>
 
