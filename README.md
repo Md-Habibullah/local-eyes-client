@@ -44,7 +44,17 @@ Built with production-ready practices, LocalEyes emphasizes scalability, securit
 - Secure password hashing
 - Data validation and protection
 
+## 📸 Screenshots
+
+### 🏠 Homepage
+![Homepage](https://res.cloudinary.com/do8bidma8/image/upload/v1769685561/localeyes-home_ijbinc.png)
+
+### 👤 Dashboard
+![Dashboard](https://res.cloudinary.com/do8bidma8/image/upload/v1769685627/localeyes-dashboard_v7mdug.png)
+
 ---
+
+
 
 ## 🛠️ Tech Stack
 
