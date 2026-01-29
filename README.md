@@ -47,10 +47,10 @@ Built with production-ready practices, LocalEyes emphasizes scalability, securit
 ## 📸 Screenshots
 
 ### 🏠 Homepage
-![Homepage](https://res.cloudinary.com/do8bidma8/image/upload/v1769685561/localeyes-home_ijbinc.png)
+<img src="https://res.cloudinary.com/do8bidma8/image/upload/v1769685561/localeyes-home_ijbinc.png" alt="LocalEyes Homepage" width="800"/>
 
 ### 👤 Dashboard
-![Dashboard](https://res.cloudinary.com/do8bidma8/image/upload/v1769685627/localeyes-dashboard_v7mdug.png)
+<img src="https://res.cloudinary.com/do8bidma8/image/upload/v1769685627/localeyes-dashboard_v7mdug.png" alt="LocalEyes Dashboard" width="800"/>
 
 ---
 
