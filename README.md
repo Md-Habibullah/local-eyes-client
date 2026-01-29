@@ -116,8 +116,9 @@ Create a `.env.local` file in the root directory:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
-NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_preset
+NODE_ENV=development
+JWT_SECRET=secret
+REFRESH_TOKEN_SECRET=secret
 ```
 
 ---
