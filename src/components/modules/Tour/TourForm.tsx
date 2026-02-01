@@ -223,7 +223,7 @@ const TourForm = ({ action }: Props) => {
                         </div>
 
                         {/* File Upload Area */}
-                        {/* <div className="mb-6">
+                        <div className="mb-6">
                             <label className="block mb-4 text-sm font-medium text-gray-900 dark:text-white">
                                 Select Images
                             </label>
@@ -254,7 +254,7 @@ const TourForm = ({ action }: Props) => {
                                     id="image-upload"
                                 />
                             </div>
-                        </div> */}
+                        </div>
 
                         {/* Image Previews */}
                         {previews.length > 0 && (

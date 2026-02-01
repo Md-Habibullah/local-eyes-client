@@ -7,6 +7,7 @@ import Link from "next/link";
 
 const ToursPage = async () => {
     const tours = await getMyTours()
+    console.log(tours)
 
     if (!tours || tours.length === 0) {
         return (
@@ -172,13 +173,13 @@ const ToursPage = async () => {
                 </div>
 
                 {/* Load More */}
-                {tours.length > 12 && (
+                {/* {tours.length > 12 && (
                     <div className="text-center mt-8">
                         <button className="px-6 py-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-gray-700 dark:text-gray-300 transition-colors">
                             Load More Tours
                         </button>
                     </div>
-                )}
+                )} */}
             </div>
         </div>
     );

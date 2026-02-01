@@ -3,7 +3,7 @@
 
 import { updateTour } from "@/services/tours/updateTour";
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState, useRef, startTransition } from "react";
 import { toast } from "sonner";
 import {
     Tag,
@@ -17,16 +17,19 @@ import {
     ArrowLeft,
     Globe,
     Building,
-    FileText
+    FileText,
+    Upload,
+    X,
 } from "lucide-react";
-import { TourCategory } from "@/zod/tour.validation"; // Import the enum
+import { TourCategory } from "@/zod/tour.validation";
+import Image from "next/image";
 
 type Props = {
     tour: any;
 };
 
-// Get the enum values as an array
 const tourCategoryOptions = Object.values(TourCategory);
+const MAX_IMAGES = 3;
 
 export default function EditTourForm({ tour }: Props) {
     const [state, formAction, pending] = useActionState(
@@ -35,23 +38,123 @@ export default function EditTourForm({ tour }: Props) {
     );
     const router = useRouter();
 
+    // State for file upload
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
+    const [previews, setPreviews] = useState<string[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Clean up preview URLs on unmount
+    useEffect(() => {
+        return () => {
+            previews.forEach(url => URL.revokeObjectURL(url));
+        };
+    }, [previews]);
+
+    // Handle success/error states
     useEffect(() => {
         if (state.success && state.message) {
             toast.success(state.message);
-            router.push("/dashboard/guide/tours");
+            // Clean up preview URLs before navigation
+            previews.forEach(url => URL.revokeObjectURL(url));
+            setTimeout(() => {
+                router.push("/dashboard/guide/tours");
+                router.refresh();
+            }, 1500);
         }
 
         if (!state.success && state.message) {
             toast.error(state.message);
         }
-    }, [state.success, state.message, router]);
+    }, [state.success, state.message, router, previews]);
+
+    const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return;
+
+        const files = Array.from(e.target.files).slice(0, MAX_IMAGES);
+
+        // Revoke previous preview URLs
+        previews.forEach(url => URL.revokeObjectURL(url));
+
+        // Create new previews
+        const urls = files.map((file) => URL.createObjectURL(file));
+
+        setSelectedImages(files);
+        setPreviews(urls);
+    };
+
+    const handleRemoveImage = (index: number) => {
+        // Revoke the object URL to prevent memory leak
+        URL.revokeObjectURL(previews[index]);
+
+        const newFiles = [...selectedImages];
+        newFiles.splice(index, 1);
+        setSelectedImages(newFiles);
+
+        const newPreviews = [...previews];
+        newPreviews.splice(index, 1);
+        setPreviews(newPreviews);
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+
+        // Append tour ID
+        if (tour?.id) {
+            formData.append("id", tour.id);
+        }
+
+        // Append new images (these will REPLACE all existing images)
+        selectedImages.forEach((file) => {
+            if (file instanceof File) {
+                formData.append("files", file);
+            }
+        });
+
+        console.log("Submitting update with:", {
+            tourId: tour?.id,
+            selectedImages: selectedImages.length,
+        });
+
+        startTransition(() => {
+            formAction(formData);
+        });
+    };
+
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    };
 
     const handleCancel = () => {
+        // Clean up preview URLs before navigating away
+        previews.forEach(url => URL.revokeObjectURL(url));
         router.push("/dashboard/guide/tours");
     };
 
+    // Guard clause if tour is null
+    if (!tour) {
+        return (
+            <div className="max-w-6xl mx-auto text-center py-12">
+                <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    Tour Not Found
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    Unable to load tour data. Please try again.
+                </p>
+                <button
+                    onClick={handleCancel}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                >
+                    Back to Tours
+                </button>
+            </div>
+        );
+    }
+
     return (
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="mb-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -71,7 +174,7 @@ export default function EditTourForm({ tour }: Props) {
                 </div>
             </div>
 
-            <form action={formAction} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-8">
                 <input type="hidden" name="id" value={tour.id} />
 
                 {/* Main Form Card */}
@@ -95,7 +198,6 @@ export default function EditTourForm({ tour }: Props) {
                                 label="Tour Title"
                                 placeholder="Exciting Adventure Tour"
                                 icon="text"
-                                required
                             />
                             <Input
                                 name="price"
@@ -111,7 +213,7 @@ export default function EditTourForm({ tour }: Props) {
                                 name="duration"
                                 defaultValue={tour.duration}
                                 type="number"
-                                label="Duration (hours)"
+                                label="Duration"
                                 placeholder="3"
                                 icon="clock"
                                 min="1"
@@ -120,7 +222,7 @@ export default function EditTourForm({ tour }: Props) {
                                 name="durationType"
                                 defaultValue={tour.durationType || "hours"}
                                 label="Duration Type"
-                                options={["hours", "days"]} // Typically only hours or days for tours
+                                options={["hours", "days"]}
                                 icon="time"
                             />
                         </div>
@@ -162,6 +264,168 @@ export default function EditTourForm({ tour }: Props) {
                                 className="md:col-span-2"
                             />
                         </div>
+                    </div>
+
+                    {/* Image Upload Section */}
+                    <div className="mb-10">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
+                                <Upload className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Tour Images</h2>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                    {selectedImages.length > 0
+                                        ? `Uploading ${selectedImages.length} new images will replace all existing images`
+                                        : `Current images will remain. Upload new ones to replace them.`
+                                    }
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Current Images Display */}
+                        {selectedImages.length === 0 && tour.images && tour.images.length > 0 && (
+                            <div className="mb-8">
+                                <label className="block mb-4 text-sm font-medium text-gray-900 dark:text-white">
+                                    Current Images ({tour.images.length}/{MAX_IMAGES})
+                                </label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {tour.images.map((src: string, i: number) => (
+                                        <div key={`existing-${i}`} className="relative rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
+                                            <div className="aspect-video relative bg-gray-100 dark:bg-gray-800">
+                                                <Image
+                                                    src={src}
+                                                    alt={`Current image ${i + 1}`}
+                                                    fill
+                                                    className="object-cover"
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                />
+                                                {i === 0 && (
+                                                    <div className="absolute top-2 left-2 px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded">
+                                                        Cover
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="p-3 bg-white dark:bg-gray-900">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                    Current Image {i + 1}
+                                                </p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    Will be replaced if you upload new images
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* File Upload Area */}
+                        <div className="mb-6">
+                            <label className="block mb-4 text-sm font-medium text-gray-900 dark:text-white">
+                                {selectedImages.length > 0
+                                    ? `New Images to Upload (${selectedImages.length}/${MAX_IMAGES})`
+                                    : `Upload New Images (max ${MAX_IMAGES})`
+                                }
+                            </label>
+                            <div className="relative">
+                                <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-2xl p-8 text-center hover:border-blue-500 dark:hover:border-blue-500 transition-colors">
+                                    <Upload className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
+                                    <p className="text-gray-700 dark:text-gray-300 mb-2">
+                                        <span className="font-semibold">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                        PNG, JPG, WEBP up to 10MB each
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={handleUploadClick}
+                                        className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors cursor-pointer"
+                                    >
+                                        Choose Files
+                                    </button>
+                                    {selectedImages.length > 0 && tour.images && tour.images.length > 0 && (
+                                        <p className="text-sm text-amber-600 dark:text-amber-400 mt-4">
+                                            <AlertCircle className="w-4 h-4 inline mr-1" />
+                                            These images will replace {tour.images.length} existing images
+                                        </p>
+                                    )}
+                                </div>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={handleFilesChange}
+                                    className="hidden"
+                                    id="image-upload-edit"
+                                />
+                            </div>
+                        </div>
+
+                        {/* New Image Previews */}
+                        {previews.length > 0 && (
+                            <div>
+                                <label className="block mb-4 text-sm font-medium text-gray-900 dark:text-white">
+                                    Selected Images ({selectedImages.length}/{MAX_IMAGES})
+                                </label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {previews.map((src, i) => (
+                                        <div key={`new-${i}`} className="relative group rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
+                                            <div className="aspect-video relative bg-gray-100 dark:bg-gray-800">
+                                                <Image
+                                                    src={src}
+                                                    alt={`Preview ${i + 1}`}
+                                                    fill
+                                                    className="object-cover"
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                />
+                                                {i === 0 && (
+                                                    <div className="absolute top-2 left-2 px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded">
+                                                        Will be cover
+                                                    </div>
+                                                )}
+                                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRemoveImage(i)}
+                                                        className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors"
+                                                        title="Remove image"
+                                                    >
+                                                        <X className="w-5 h-5" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="p-3 bg-white dark:bg-gray-900">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                    {selectedImages[i]?.name || `Image ${i + 1}`}
+                                                </p>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    {(selectedImages[i]?.size / (1024 * 1024)).toFixed(2)} MB
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Warning when no images */}
+                        {selectedImages.length === 0 && (!tour.images || tour.images.length === 0) && (
+                            <div className="rounded-xl p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800">
+                                <div className="flex items-start gap-3">
+                                    <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
+                                            No images currently
+                                        </p>
+                                        <p className="text-xs text-yellow-700 dark:text-yellow-400 mt-1">
+                                            Your tour will be displayed without images. Upload at least one image for better visibility.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Description & Itinerary */}
@@ -216,7 +480,7 @@ export default function EditTourForm({ tour }: Props) {
                                 name="category"
                                 defaultValue={tour.category}
                                 label="Category"
-                                options={tourCategoryOptions} // Use the imported enum values
+                                options={tourCategoryOptions}
                                 icon="category"
                             />
                         </div>
@@ -242,7 +506,7 @@ export default function EditTourForm({ tour }: Props) {
                                         defaultChecked={tour.isActive}
                                         className="sr-only peer"
                                     />
-                                    <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left:0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                 </label>
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 ml-14">
@@ -268,7 +532,7 @@ export default function EditTourForm({ tour }: Props) {
                     <button
                         type="submit"
                         disabled={pending}
-                        className="px-8 py-3 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg hover:shadow-xl"
+                        className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg hover:shadow-xl"
                     >
                         {pending ? (
                             <>

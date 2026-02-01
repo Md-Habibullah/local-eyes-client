@@ -191,13 +191,15 @@ const EditProfileForm = ({ initialData }: EditProfileFormProps) => {
             }
 
             // Make the API call with credentials
-            // const response = await fetch(`https://local-eyes-server.vercel.app/api/v1/users/${initialData.id}`, {
-            //     method: "PATCH",
-            //     credentials: "include", // This sends cookies automatically
-            //     body: formDataToSend,
-            //     // Note: Don't set Content-Type header for FormData
-            //     // Don't set Authorization header if using cookies
-            // });
+            // const response = await fetch(
+            //     `https://local-eyes-server.vercel.app/api/v1/users/${initialData.id}`,
+            //     {
+            //         method: "PATCH",
+            //         credentials: "include",
+            //         body: formDataToSend,
+            //     }
+            // );
+
             const response = await serverFetch.patch(`/users/${initialData.id}`, {
                 body: formDataToSend,
             });
