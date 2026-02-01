@@ -335,7 +335,7 @@ export default function EditTourForm({ tour }: Props) {
                                         <span className="font-semibold">Click to upload</span> or drag and drop
                                     </p>
                                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                                        PNG, JPG, WEBP up to 10MB each
+                                        PNG, JPG, WEBP up to 200KB each
                                     </p>
                                     <button
                                         type="button"
