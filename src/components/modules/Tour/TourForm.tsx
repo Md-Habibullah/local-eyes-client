@@ -5,6 +5,7 @@ import { TourCategory } from "@/zod/tour.validation";
 import { useActionState } from "react";
 import Image from "next/image";
 import { Upload, X, MapPin, Users, Clock, DollarSign, Tag } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 type ActionState = {
     success: boolean;
@@ -22,6 +23,8 @@ const TourForm = ({ action }: Props) => {
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [aiLoading, setAiLoading] = useState(false);
+    const descriptionRef = useRef<HTMLTextAreaElement | null>(null);
 
     const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
@@ -41,6 +44,39 @@ const TourForm = ({ action }: Props) => {
         const newPreviews = [...previews];
         newPreviews.splice(index, 1);
         setPreviews(newPreviews);
+    };
+
+    const handleGenerateDescription = async () => {
+        const title = (document.querySelector('input[name="title"]') as HTMLInputElement)?.value;
+        const city = (document.querySelector('input[name="city"]') as HTMLInputElement)?.value;
+        const category = (document.querySelector('select[name="category"]') as HTMLSelectElement)?.value;
+
+        if (!title || !city || !category) {
+            alert("Please fill Title, City and Category first");
+            return;
+        }
+
+        try {
+            setAiLoading(true);
+
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai/generate-tour-description`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ title, city, category }),
+            });
+
+            const data = await res.json();
+
+            if (data?.data && descriptionRef.current) {
+                descriptionRef.current.value = data.data;
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setAiLoading(false);
+        }
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -185,7 +221,7 @@ const TourForm = ({ action }: Props) => {
                     </div>
 
                     {/* Description & Itinerary */}
-                    <div className="mb-10">
+                    {/* <div className="mb-10">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <Textarea
                                 name="description"
@@ -206,6 +242,31 @@ const TourForm = ({ action }: Props) => {
                                 rows={6}
                             />
                         </div>
+                    </div> */}
+                    <div className="flex flex-col gap-2">
+                        <div className="flex justify-between items-center">
+                            <label className="text-sm font-medium text-gray-900 dark:text-white">
+                                Tour Description <span className="text-red-500">*</span>
+                            </label>
+
+                            <button
+                                type="button"
+                                onClick={handleGenerateDescription}
+                                className="flex items-center gap-1 text-xs px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-md"
+                            >
+                                <Sparkles className="w-3 h-3" />
+                                {aiLoading ? "Generating..." : "AI Suggest"}
+                            </button>
+                        </div>
+
+                        <textarea
+                            ref={descriptionRef}
+                            name="description"
+                            placeholder="Describe the experience, what makes it special, what guests can expect..."
+                            required
+                            rows={6}
+                            className="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
+                        />
                     </div>
 
                     {/* Image Upload Section */}
