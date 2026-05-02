@@ -25,7 +25,6 @@ Built with production-ready practices, LocalEyes emphasizes scalability, securit
 ### 🧑‍🤝‍🧑 For Travelers
 - Search and filter guides by location, expertise, and ratings
 - Book tours with secure payment processing
-- Real-time chat with guides
 - Rate and review experiences
 - Fully responsive design
 
@@ -72,7 +71,6 @@ Built with production-ready practices, LocalEyes emphasizes scalability, securit
 - PostgreSQL
 - Prisma ORM
 - JWT & bcrypt
-- Socket.io (real-time chat)
 - Cloudinary (file uploads)
 
 ### DevOps & Tools
