@@ -238,8 +238,9 @@ const LoginForm = ({ redirect, onFillCredentials }: { redirect?: string; onFillC
                             Guide
                         </button>
                     </div>
-                    <p className="text-xs text-red-400 dark:text-red-400 text-center mt-2">
-                        Do not misuse these credentials.
+                    <p className="text-sm text-red-400 dark:text-red-400 text-center mt-2">
+                        {/* Do not misuse these credentials. */}
+                        Important Note : Only admin and verified guide accounts can create, update, or delete tours. Tourist accounts are for browsing and booking only.
                     </p>
                 </div>
 

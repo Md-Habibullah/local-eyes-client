@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { getToursWithLimit } from "@/services/tours/getTours";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function FeaturedTours() {
 
@@ -182,14 +183,17 @@ export default async function FeaturedTours() {
                                         <div className="flex items-center gap-3 p-3 rounded-xl bg-linear-to-r from-primary/5 to-transparent group-hover:from-primary/10 group-hover:to-primary/5 transition-all duration-300">
                                             {tour.guide.profilePhoto ? (
                                                 <div className="relative">
-                                                    <div className="absolute -inset-1 bg-linear-to-r from-primary to-pink-500 rounded-full blur opacity-20" />
-                                                    <Image
-                                                        src={tour.guide.profilePhoto}
-                                                        alt={tour.guide.name}
-                                                        width={40}
-                                                        height={40}
-                                                        className="rounded-full relative border-2 border-white"
-                                                    />
+                                                    <div className="absolute -inset-1 bg-gradient-to-r from-primary to-pink-500 rounded-full blur opacity-20 dark:from-primary/90 dark:to-pink-500/90" />
+                                                    <Avatar className="h-10 w-10 relative border-2 border-white dark:border-gray-900">
+                                                        <AvatarImage
+                                                            src={tour.guide.profilePhoto}
+                                                            alt={tour.guide.name}
+                                                            className="dark:brightness-90"
+                                                        />
+                                                        <AvatarFallback className="bg-gradient-to-r from-primary to-pink-500 dark:from-primary/90 dark:to-pink-500/90 text-white font-bold">
+                                                            {tour.guide.name?.charAt(0) || "G"}
+                                                        </AvatarFallback>
+                                                    </Avatar>
                                                 </div>
                                             ) : (
                                                 <div className="h-10 w-10 rounded-full bg-linear-to-r from-primary to-pink-500 flex items-center justify-center text-white font-bold">

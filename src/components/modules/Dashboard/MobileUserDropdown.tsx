@@ -36,7 +36,9 @@ import {
     Users,
     Key,
     BarChart3,
+    Plus,
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface MobileUserDropdownProps {
     userInfo: UserInfo;
@@ -81,6 +83,39 @@ const MobileUserDropdown = ({ userInfo, userData }: MobileUserDropdownProps) => 
             return userInfo.email.charAt(0).toUpperCase();
         }
         return "U";
+    };
+
+    const handleAddTourClick = (e: React.MouseEvent) => {
+        if (userInfo.role === 'TOURIST') {
+            e.preventDefault();
+            toast.error("Only guides can create tours");
+        } else if (userInfo.role === 'ADMIN') {
+            e.preventDefault();
+            toast.error("Only guides can create tours");
+        }
+    };
+
+    const handleManageToursClick = (e: React.MouseEvent) => {
+        if (userInfo.role === 'TOURIST') {
+            e.preventDefault();
+            toast.error("Only guides and admins can manage tours");
+        }
+    };
+
+    const getAddTourHref = () => {
+        if (userInfo.role === 'GUIDE') {
+            return "/dashboard/guide/tours/create";
+        }
+        return "#";
+    };
+
+    const getManageToursHref = () => {
+        if (userInfo.role === 'GUIDE') {
+            return "/dashboard/guide/tours";
+        } else if (userInfo.role === 'ADMIN') {
+            return "/admin/dashboard/tours";
+        }
+        return "#";
     };
 
     return (
@@ -193,6 +228,31 @@ const MobileUserDropdown = ({ userInfo, userData }: MobileUserDropdownProps) => 
                         </Link>
                     </DropdownMenuItem>
 
+                    <DropdownMenuItem asChild className="p-3 rounded-lg cursor-pointer">
+                        <Link href={getAddTourHref()} onClick={handleAddTourClick} className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                <Plus className="w-4 h-4 text-green-600 dark:text-green-400" />
+                            </div>
+                            <div className="flex-1">
+                                <div className="font-medium">Add Tour</div>
+                                <div className="text-xs text-muted-foreground">Add tour item</div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                        </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild className="p-3 rounded-lg cursor-pointer">
+                        <Link href={getManageToursHref()} onClick={handleManageToursClick} className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                                <Settings className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                            </div>
+                            <div className="flex-1">
+                                <div className="font-medium">Manage Tours</div>
+                                <div className="text-xs text-muted-foreground">Edit and organize tours</div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                        </Link>
+                    </DropdownMenuItem>
                 </div>
 
                 <DropdownMenuSeparator />

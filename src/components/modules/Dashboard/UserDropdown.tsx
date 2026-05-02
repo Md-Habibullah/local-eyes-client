@@ -27,6 +27,7 @@ import {
   Zap,
   Globe,
   Lock,
+  Plus,
   Calendar,
   BarChart3,
   Activity,
@@ -39,6 +40,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface UserDropdownProps {
   userInfo: UserInfo;
@@ -68,6 +70,39 @@ const UserDropdown = ({ userInfo, userData }: UserDropdownProps) => {
       case 'TOURIST': return <User className="w-3 h-3" />;
       default: return <User className="w-3 h-3" />;
     }
+  };
+
+  const handleAddTourClick = (e: React.MouseEvent) => {
+    if (userInfo.role === 'TOURIST') {
+      e.preventDefault();
+      toast.error("Only guides can create tours");
+    } else if (userInfo.role === 'ADMIN') {
+      e.preventDefault();
+      toast.error("Only guides can create tours");
+    }
+  };
+
+  const handleManageToursClick = (e: React.MouseEvent) => {
+    if (userInfo.role === 'TOURIST') {
+      e.preventDefault();
+      toast.error("Only guides and admins can manage tours");
+    }
+  };
+
+  const getAddTourHref = () => {
+    if (userInfo.role === 'GUIDE') {
+      return "/dashboard/guide/tours/create";
+    }
+    return "#";
+  };
+
+  const getManageToursHref = () => {
+    if (userInfo.role === 'GUIDE') {
+      return "/dashboard/guide/tours";
+    } else if (userInfo.role === 'ADMIN') {
+      return "/admin/dashboard/tours";
+    }
+    return "#";
   };
 
   return (
@@ -218,21 +253,31 @@ const UserDropdown = ({ userInfo, userData }: UserDropdownProps) => {
               </Link>
             </DropdownMenuItem>
 
-            {/* <DropdownMenuItem asChild className="group p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all cursor-pointer">
-              <Link href="/notifications" className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-purple-100 to-pink-100 dark:from-purple-500/20 dark:to-pink-500/20 flex items-center justify-center group-hover:from-purple-200 group-hover:to-pink-200 dark:group-hover:from-purple-500/30 dark:group-hover:to-pink-500/30">
-                  <Bell className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            <DropdownMenuItem asChild className="group p-3 rounded-xl mb-1 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all cursor-pointer">
+              <Link href={getAddTourHref()} onClick={handleAddTourClick} className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-100 to-orange-100 dark:from-amber-500/20 dark:to-orange-500/20 flex items-center justify-center group-hover:from-amber-200 group-hover:to-orange-200 dark:group-hover:from-amber-500/30 dark:group-hover:to-orange-500/30">
+                  <Plus className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900 dark:text-white">Notifications</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Manage alerts and updates</div>
+                  <div className="font-medium text-gray-900 dark:text-white">Add Tour</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Add tour item</div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-linear-to-r from-red-500 to-pink-500 animate-pulse" />
-                  <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300" />
-                </div>
+                <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300" />
               </Link>
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
+
+            <DropdownMenuItem asChild className="group p-3 rounded-xl mb-1 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all cursor-pointer">
+              <Link href={getManageToursHref()} onClick={handleManageToursClick} className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-100 to-orange-100 dark:from-amber-500/20 dark:to-orange-500/20 flex items-center justify-center group-hover:from-amber-200 group-hover:to-orange-200 dark:group-hover:from-amber-500/30 dark:group-hover:to-orange-500/30">
+                  <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-medium text-gray-900 dark:text-white">Manage Tours</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Edit and organize your tours</div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300" />
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
         </div>
 

@@ -5,7 +5,7 @@
 
 ## 📋 Overview
 
-**LocalEyes** is a full-stack web platform that connects tourists with certified local guides for authentic travel experiences.  
+**LocalEyes** is a full-stack web platform that connects tourists with certified local guides for authentic travel experiences.
 The platform focuses on secure bookings, intelligent guide discovery, real-time communication, and role-based system architecture.
 
 Built with production-ready practices, LocalEyes emphasizes scalability, security, and maintainability.
@@ -93,6 +93,11 @@ Built with production-ready practices, LocalEyes emphasizes scalability, securit
 
 ---
 
+Note:
+In this system, "Add Item" is mapped to "Create Tour".
+Due to real-world design, only Guide/Admin roles can create tours.
+Tourists can interact via booking instead.
+
 ## 📦 Installation
 
 Clone the repository:
@@ -131,14 +136,14 @@ npm run dev
 yarn dev
 ```
 
-Open in browser:  
+Open in browser:
 👉 http://localhost:3000
 
 ---
 
 ## 🔗 API Integration
 
-This frontend connects to the **LocalEyes Backend API**.  
+This frontend connects to the **LocalEyes Backend API**.
 Ensure the backend server is running.
 
 👉 Backend Repository: `local-eyes-server`

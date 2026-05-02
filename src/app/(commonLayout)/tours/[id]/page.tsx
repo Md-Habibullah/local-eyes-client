@@ -34,6 +34,7 @@ import Link from "next/link";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 import DeleteTourButton from "@/components/modules/Tour/DeleteTourButton";
 import TourImageGallery from "@/components/modules/Tour/TourImagesGallary";
+import { ArrowLeft } from "lucide-react";
 
 export default async function TourDetailsPage({
     params,
@@ -94,7 +95,11 @@ export default async function TourDetailsPage({
             <div className="max-w-7xl mx-auto p-4 md:p-6">
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-6">
-                    <Link href="/tours" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                    <Link
+                        href="/tours"
+                        className="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
                         Tours
                     </Link>
                     <ChevronRight className="w-4 h-4" />
